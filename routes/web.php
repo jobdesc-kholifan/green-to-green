@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AppController;
+use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [AppController::class, 'index']);
+Route::group(['prefix' => 'auth'], function() {
+
+    Route::get('login', [AuthController::class, 'login'])->name(DBRoutes::authLogin);
+});
+
+Route::group(['prefix' => 'admin'], function() {
+
+    Route::get('', [AppController::class, 'admin']);
 });
