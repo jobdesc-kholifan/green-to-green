@@ -4,6 +4,7 @@ use App\Http\Controllers\AppController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Masters\AchievementController;
 use App\Http\Controllers\Masters\ConfigController;
+use App\Http\Controllers\Masters\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -66,6 +67,18 @@ Route::group(['middleware' => 'auth'], function() {
             Route::get('{id}', [AchievementController::class, 'show']);
             Route::post('{id}', [AchievementController::class, 'update']);
             Route::delete('{id}', [AchievementController::class, 'destroy']);
+        });
+
+        Route::group(['prefix' => 'users'], function() {
+            Route::post('datatables', [UserController::class, 'datatables']);
+            Route::get('form', [UserController::class, 'form']);
+            Route::get('detail', [UserController::class, 'detail']);
+
+            Route::get('', [UserController::class, 'index'])->name(DBRoutes::user);
+            Route::post('', [UserController::class, 'store']);
+            Route::get('{id}', [UserController::class, 'show']);
+            Route::post('{id}', [UserController::class, 'update']);
+            Route::delete('{id}', [UserController::class, 'destroy']);
         });
     });
 });

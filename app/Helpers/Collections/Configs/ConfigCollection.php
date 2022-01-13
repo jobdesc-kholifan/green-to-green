@@ -62,6 +62,17 @@ class ConfigCollection extends Collection
     }
 
     /**
+     * @return ConfigCollection
+     * */
+    public function parent()
+    {
+        if($this->hasNotEmpty('parent'))
+            return new ConfigCollection($this->get('parent'));
+
+        return new ConfigCollection();
+    }
+
+    /**
      * @return ConfigArray
      * */
     public function getChildren()

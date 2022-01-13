@@ -30,8 +30,8 @@ class UserSeeder extends Seeder
         UserCollection::create([
             'full_name' => 'Superuser',
             'gender_id' => $config->get(\DBTypes::genderMan)->getId(),
-            'pob' => 'Website',
-            'dob' => currentDate('Y-m-d'),
+            'place_of_birth' => 'Website',
+            'date_of_birth' => currentDate('Y-m-d'),
             'address' => url('/'),
             'email' => 'superuser@green-to-green.buatkerja.com',
             'phone_number' => '1234567890',

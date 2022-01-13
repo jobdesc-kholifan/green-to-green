@@ -5,6 +5,7 @@ namespace App\Models\Masters;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Carbon;
 
 class User extends Authenticatable
 {
@@ -15,8 +16,8 @@ class User extends Authenticatable
     protected $fillable = [
         'full_name',
         'gender_id',
-        'pob',
-        'dob',
+        'place_of_birth',
+        'date_of_birth',
         'email',
         'phone_number',
         'user_name',
@@ -27,12 +28,19 @@ class User extends Authenticatable
 
     public $defaultSelects = [
         'full_name',
-        'pob',
-        'dob',
+        'place_of_birth',
+        'date_of_birth',
         'email',
         'phone_number',
         'user_name'
     ];
+
+    public function getDateOfBirthAttribute($value)
+    {
+        return Carbon::createFromTimestamp(strtotime($value))
+            ->setTimezone(env('APP_TIMEZONE'))
+            ->format('d/m/Y');
+    }
 
     /**
      * static function yang digunakan ketika memanggil with biar tidak perlu
@@ -61,7 +69,10 @@ class User extends Authenticatable
     private function _defaultWith($query, $selects = [])
     {
         return $query->with([
-        ])->select($this->getKeyName())->addSelect($selects);
+            'gender' => function($query) {
+                Config::foreignWith($query);
+            }
+        ])->select($this->getKeyName(), 'gender_id')->addSelect($selects);
     }
 
     /**
@@ -90,5 +101,24 @@ class User extends Authenticatable
     public function status()
     {
         return $this->hasOne(Config::class, 'id', 'status_id');
+    }
+
+    public function gender()
+    {
+        return $this->hasOne(Config::class, 'id', 'gender_id');
+    }
+
+    public function defaultQuery()
+    {
+        return $this->defaultWith($this->defaultSelects)
+            ->with([
+                'status' => function($query) {
+                    Config::foreignWith($query);
+                },
+                'role' => function($query) {
+                    Config::foreignWith($query);
+                },
+            ])
+            ->addSelect('role_id', 'status_id');
     }
 }

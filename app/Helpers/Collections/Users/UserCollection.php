@@ -49,12 +49,13 @@ class UserCollection extends Collection
 
     public function getPlaceOfBirth()
     {
-        return $this->get('pob');
+        return $this->get('place_of_birth');
     }
 
-    public function getDateOfBirth()
+    public function getDateOfBirth($format = 'd/m/Y')
     {
-        return $this->get('dob');
+        $date = $this->get('date_of_birth');
+        return !empty($date) ? dbDate($date, $format) : null;
     }
 
     public function getAddress()

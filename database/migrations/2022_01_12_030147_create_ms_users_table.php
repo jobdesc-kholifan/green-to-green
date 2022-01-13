@@ -17,8 +17,8 @@ class CreateMsUsersTable extends Migration
             $table->id();
             $table->string('full_name');
             $table->bigInteger('gender_id')->nullable();
-            $table->string('pob', 25)->nullable();
-            $table->date('dob')->nullable();
+            $table->string('place_of_birth', 25)->nullable();
+            $table->date('date_of_birth')->nullable();
             $table->text('address')->nullable();
             $table->string('email', 100)->nullable();
             $table->string('phone_number', 15)->nullable();

@@ -34,9 +34,13 @@ if(!function_exists('currentDate')) {
 
 if(!function_exists('dbDate')) {
 
-    function dbDate($date) {
-        $newDate = str_replace("/", "-", $date);
-        return date('Y-m-d', strtotime($newDate));
+    function dbDate($date, $format = 'Y-m-d') {
+        if(!empty($date)) {
+            $newDate = str_replace("/", "-", $date);
+            return date($format, strtotime($newDate));
+        }
+
+        return date($format);
     }
 }
 

@@ -20,8 +20,8 @@
                         <p>Achievement</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
+                <li class="nav-item{{ isParentMenuOpen(DBRoutes::user, $route) }}">
+                    <a href="{{ route(DBRoutes::user) }}" class="nav-link{{ isMenuActive($route, DBRoutes::user) }}">
                         <i class="nav-icon fas fa-user"></i>
                         <p>Users</p>
                     </a>

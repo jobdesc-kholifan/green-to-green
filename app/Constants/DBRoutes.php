@@ -15,4 +15,6 @@ class DBRoutes
 
     const config = 'config';
     const configSelect = 'config.select';
+
+    const user = 'user';
 }

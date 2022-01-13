@@ -46,4 +46,27 @@ class ConfigFinderCollection extends CollectionFinder
     {
         return parent::getArray($keyValue);
     }
+
+    /**
+     * Ambil data child dari tipe yang dicari
+     *
+     * @param string|null $keyValue
+     * @return ConfigCollection[]
+     * @throws \Exception
+     * */
+    public function children($keyValue = null)
+    {
+        if($this->items->count() == 0)
+            throw new \Exception("Data tipe tidak ditemukan");
+
+        if(is_null($keyValue))
+            $keyValue = $this->keys->first();
+
+        $data = $this->items->filter(function($data) use ($keyValue) {
+            /* @var ConfigCollection $data*/
+            return $data->parent()->get($this->key) == $keyValue;
+        });
+
+        return $data->toArray();
+    }
 }
