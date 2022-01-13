@@ -23,7 +23,7 @@
             <form action="" method="post" id="form-login">
                 {{ csrf_field() }}
                 <div class="input-group mb-3">
-                    <input type="text" name="username" class="form-control" placeholder="Nama Pengguna">
+                    <input type="text" name="username" class="form-control" placeholder="Nama Pengguna / Email">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-user"></span>
@@ -40,20 +40,14 @@
                 </div>
                 <div id="fb-root"></div>
                 <div class="social-auth-links text-center mt-2 mb-3">
-                    <button type="submit" class="btn btn-block btn-success mb-1">
+                    <button type="submit" class="btn btn-block btn-success mb-2">
                         <i class="fa fa-sign-in-alt"></i> Masuk
                     </button>
-                    <div class="g-signin2" data-width="320" data-longtitle="true">
-                        <div class="fb-login-button" data-width="" data-size="large" data-button-type="continue_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="false"></div>
+                    <div class="g-signin2" data-width="320" data-longtitle="true" data-onsuccess="onSignIn"></div>
                 </div>
             </form>
         </div>
     </div>
-    {{--    <div class="text-left">--}}
-    {{--        <div class="text-bold">Catatan:</div>--}}
-    {{--        <div>Jika ada kendala mengenai system bisa konsultasikan ke tim terkait</div>--}}
-    {{--        <div>WA: 085853640186</div>--}}
-    {{--    </div>--}}
 </div>
 
 <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
@@ -65,28 +59,54 @@
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/id_ID/sdk.js#xfbml=1&version=v12.0&appId=613494736572894&autoLogAppEvents=1" nonce="UkjR5eeE"></script>
 <script type="text/javascript">
-    $('#form-login').formSubmit({
+    const $formLogin = $('#form-login').formSubmit({
         beforeSubmit: function(form) {
             form.setDisabled(true);
         },
         successCallback: function(res, form) {
             form.setDisabled(false);
-            if(res.result)
-                window.location.reload();
+            if(res.data !== undefined && res.data.redirect !== undefined)
+                window.location.href = res.data.redirect;
 
             AlertNotif.toastr.response(res);
         },
         errorCallback: function(xhr, form) {
-            window.location.href = "{{ url('/') }}";
-            // form.setDisabled(false);
-            // AlertNotif.adminlte.error(DBMessage.ERROR_SYSTEM_MESSAGE, {
-            //     title: DBMessage.ERROR_SYSTEM_TITLE
-            // });
+            form.setDisabled(false);
+            AlertNotif.adminlte.error(DBMessage.ERROR_SYSTEM_MESSAGE, {
+                title: DBMessage.ERROR_SYSTEM_TITLE
+            });
         }
     });
 
     function onSignIn(googleUser) {
         const profile = googleUser.getBasicProfile();
+        $formLogin.setDisabled(true);
+
+        ServiceAjax.post("{{ route(DBRoutes::authGoogleLogin) }}", {
+            data: {
+                _token: "{{ csrf_token() }}",
+                full_name: profile.getName(),
+                email: profile.getEmail(),
+            },
+            success: (res) => {
+                $formLogin.setDisabled(false);
+                if(res.data.redirect !== undefined)
+                    window.location.href = res.data.redirect;
+            },
+            error: () => {
+                $formLogin.setDisabled(false);
+                AlertNotif.adminlte.error(DBMessage.ERROR_SYSTEM_MESSAGE, {
+                    title: DBMessage.ERROR_SYSTEM_TITLE
+                });
+            }
+        })
+    }
+
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+            console.log('User signed out.');
+        });
     }
 
     window.fbAsyncInit = function() {
@@ -113,6 +133,7 @@
 
     function checkLoginState() {
         FB.getLoginStatus(function(response) {
+            console.log(response);
             statusChangeCallback(response);
         });
     }

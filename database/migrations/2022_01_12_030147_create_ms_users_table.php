@@ -16,12 +16,14 @@ class CreateMsUsersTable extends Migration
         Schema::create('ms_users', function (Blueprint $table) {
             $table->id();
             $table->string('full_name');
-            $table->bigInteger('gender_id');
+            $table->bigInteger('gender_id')->nullable();
             $table->string('pob', 25)->nullable();
             $table->date('dob')->nullable();
             $table->text('address')->nullable();
             $table->string('email', 100)->nullable();
             $table->string('phone_number', 15)->nullable();
+            $table->string('user_name', 100);
+            $table->text('user_password');
             $table->bigInteger('role_id');
             $table->bigInteger('status_id');
 

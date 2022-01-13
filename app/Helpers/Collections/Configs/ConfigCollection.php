@@ -21,11 +21,16 @@ class ConfigCollection extends Collection
         $create = new ConfigCollection($config->create($values));
 
         if(!is_null($children)) {
+
+            $insertChild = [];
             foreach($children as $child) {
-                $child['parent_id'] = $create->getId();
+                $dChild = $child;
+                $dChild['parent_id'] = $create->getId();
+
+                $insertChild[] = $dChild;
             }
 
-            $config->insert($children);
+            $config->insert($insertChild);
         }
 
         return $create;
@@ -38,7 +43,7 @@ class ConfigCollection extends Collection
 
     public function getName()
     {
-        return $this->get('name');
+        return $this->get('config_name');
     }
 
     public function getSlug()
@@ -51,7 +56,7 @@ class ConfigCollection extends Collection
         return $this->get('sequence');
     }
 
-    public function getPayload()
+    public function payload()
     {
         return $this->get('payload');
     }

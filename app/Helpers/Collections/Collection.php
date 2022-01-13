@@ -21,7 +21,7 @@ class Collection
          *
          * @var object $data
          * */
-        if(method_exists($data, 'toArray'))
+        if(is_object($data) && method_exists($data, 'toArray'))
             $this->data = collect($data->toArray());
 
         /**

@@ -207,9 +207,6 @@
 
             this.header.append($('<h3>', {class: this.classes.headerTitle}).text(res.title));
 
-            if(this.options.closeButton)
-                this.header.append($('<span>', {class: this.classes.buttonClose, 'data-dismiss': 'modal'}).html('&times;'));
-
             this.body.html(res.body);
         }
 
@@ -224,10 +221,7 @@
         this.buildContentBody();
         this.buildContentFooter();
 
-        this.header.append($('<h3>', {class: this.classes.headerTitle}).text(this.options.title));
-
-        if(this.options.closeButton)
-            this.header.append($('<span>', {class: this.classes.buttonClose, 'data-dismiss': 'modal'}).html('&times;'));
+        this.header.prepend($('<h3>', {class: this.classes.headerTitle}).text(this.options.title));
 
         this.body.html(this.options.message);
 
@@ -646,7 +640,8 @@
         let $this = $(this);
         let data = new FormSubmit(this);
         $this.data('app.formSubmit', data);
+        data.submit(options);
 
-        return data.submit(options);
+        return data;
     }
 }(jQuery);

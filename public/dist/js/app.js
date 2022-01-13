@@ -164,6 +164,18 @@ const ServiceAjax = {
     }
 };
 
+const Auth = {
+    routes: {
+        logout: null,
+    },
+    signOut: async function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        await auth2.signOut();
+
+        window.location.href = Auth.routes.logout;
+    },
+}
+
 const FormComponents = {
     select2: {
         selector: '[data-toggle=select2]',

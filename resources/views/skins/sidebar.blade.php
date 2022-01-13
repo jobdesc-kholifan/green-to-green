@@ -1,4 +1,4 @@
-<aside class="main-sidebar bg-olive sidebar-dark-primary">
+<aside class="main-sidebar bg-dark sidebar-dark-olive">
     <a href="{{ url('/') }}" class="brand-link text-center py-2">
         <span class="brand-text font-weight-light" style="font-size: 30px">Green<b>-to-Green</b></span>
     </a>
@@ -14,15 +14,15 @@
 
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
+                <li class="nav-item{{ isParentMenuOpen(DBRoutes::achievement, $route) }}">
+                    <a href="{{ route(DBRoutes::achievement) }}" class="nav-link{{ isMenuActive($route, DBRoutes::achievement) }}">
                         <i class="nav-icon fas fa-tasks"></i>
                         <p>Achievement</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-userph"></i>
+                        <i class="nav-icon fas fa-user"></i>
                         <p>Users</p>
                     </a>
                 </li>
