@@ -37,9 +37,9 @@ class User extends Authenticatable
 
     public function getDateOfBirthAttribute($value)
     {
-        return Carbon::createFromTimestamp(strtotime($value))
+        return is_null($value) ? null : Carbon::createFromTimestamp(strtotime($value))
             ->setTimezone(env('APP_TIMEZONE'))
-            ->format('d/m/Y');
+            ->format('d/m/Y') ;
     }
 
     /**

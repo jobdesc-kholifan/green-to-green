@@ -24,34 +24,40 @@
                 <div class="form-group">Untuk melanjutkan proses registrasi masukan nama pengguna dan kata sandi</div>
                 <div class="input-group mb-3">
                     <label for="input-fullname" class="d-none">Nama Lengkap</label>
-                    <input type="text" name="full_name" id="input-fullname" class="form-control" placeholder="Nama Lengkap" value="{{ $fullName }}">
+                    <input type="text" name="full_name" id="input-fullname" class="form-control" placeholder="Nama Lengkap" required>
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-user"></span>
                         </div>
                     </div>
                 </div>
-                <div class="input-group mb-3">
-                    <label for="input-email" class="d-none"></label>
-                    <input type="text" id="input-email" class="form-control" value="{{ $email }}" disabled>
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-envelope"></span>
+                <div class="form-group">
+                    <div class="input-group">
+                        <label for="input-email" class="d-none"></label>
+                        <input type="text" id="input-email" class="form-control" name="email" placeholder="Email" data-toggle="validation" data-url="{{ route(DBRoutes::authCheck) }}" data-label="email" data-field="email" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text" data-action="icon">
+                                <i class="fa fa-envelope"></i>
+                            </div>
                         </div>
                     </div>
+                    <small class="text-danger" data-action="message"></small>
                 </div>
-                <div class="input-group mb-3">
-                    <label for="input-username" class="d-none"></label>
-                    <input type="text" name="user_name" id="input-username" class="form-control" placeholder="Nama Pengguna">
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-user"></span>
+                <div class="form-group">
+                    <div class="input-group">
+                        <label for="input-username" class="d-none"></label>
+                        <input type="text" name="user_name" id="input-username" class="form-control" placeholder="Nama Pengguna" data-toggle="validation" data-url="{{ route(DBRoutes::authCheck) }}" data-label="nama pengguna" data-field="user_name" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text" data-action="icon">
+                                <span class="fas fa-user"></span>
+                            </div>
                         </div>
                     </div>
+                    <small class="text-danger" data-action="message"></small>
                 </div>
                 <div class="input-group mb-3">
                     <label for="input-password" class="d-none"></label>
-                    <input type="password" name="password" id="input-password" class="form-control" placeholder="Kata Sandi">
+                    <input type="password" name="password" id="input-password" class="form-control" placeholder="Kata Sandi" required>
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-lock"></span>
@@ -61,11 +67,11 @@
                 <div class="social-auth-links text-center mt-2 mb-3">
                     <button type="submit" class="btn btn-block btn-success mb-1">
                         <i class="fa fa-sign-in-alt"></i>
-                        <span>Lanjutkan</span>
+                        <span>Daftar</span>
                     </button>
-                    <button type="button" class="btn btn-link" onclick="actions.skip()">
-                        <span>Nanti Saja</span>
-                    </button>
+                    <a href="{{ route(DBRoutes::authSignIn) }}" class="btn btn-link">
+                        <span>Sudah punya akun? Login</span>
+                    </a>
                 </div>
             </form>
         </div>
@@ -77,14 +83,17 @@
 <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
 <script src="{{ asset('dist/js/load.modal.js') }}"></script>
 <script src="{{ asset('dist/js/app.js') }}"></script>
+<script src="{{ asset('dist/js/jquery-classes.js') }}"></script>
 <script src="{{ asset('dist/js/actions.js') }}"></script>
 <script type="text/javascript">
+
     const $formLogin = $('#form-register').formSubmit({
-        data: {
-            email: "{{ $email }}",
-        },
         beforeSubmit: function(form) {
-            form.setDisabled(true);
+            let isValid = FormComponents.validation.isValid();
+            if(isValid)
+                form.setDisabled(true);
+
+            return isValid;
         },
         successCallback: function(res, form) {
             form.setDisabled(false);
@@ -101,27 +110,7 @@
         }
     });
 
-    const actions = new Actions("{{ url()->current() }}");
-    actions.skip = function() {
-        ServiceAjax.post("{{ url()->current() }}/skip", {
-            data: {
-                _token: "{{ csrf_token() }}",
-                email: "{{ $email }}",
-                full_name: "{{ $fullName }}",
-            },
-            success: (res) => {
-                AlertNotif.toastr.response(res);
-
-                if(res.data.redirect !== undefined)
-                    window.location.href = res.data.redirect;
-            },
-            error: () => {
-                AlertNotif.adminlte.error(DBMessage.ERROR_SYSTEM_MESSAGE, {
-                    title: DBMessage.ERROR_SYSTEM_TITLE
-                });
-            }
-        })
-    };
+    FormComponents.validation.init();
 </script>
 </body>
 </html>

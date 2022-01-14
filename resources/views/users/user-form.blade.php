@@ -60,14 +60,26 @@
         </div>
         <div class="form-group">
             <label for="input-email" class="required">Email</label>
-            <input
-                type="text"
-                id="input-email"
-                class="form-control"
-                name="email"
-                placeholder="{{ DBText::inputPlaceholder('Email') }}"
-                maxlength="100"
-            />
+            <div class="input-group">
+                <input
+                    type="text"
+                    id="input-email"
+                    class="form-control"
+                    name="email"
+                    placeholder="{{ DBText::inputPlaceholder('Email') }}"
+                    maxlength="100"
+                    data-toggle="validation"
+                    data-url="{{ route(DBRoutes::userCheck) }}"
+                    data-label="email"
+                    data-field="email"
+                />
+                <div class="input-group-append">
+                    <div class="input-group-text bg-transparent" data-action="icon">
+                        <i class="fa fa-envelope"></i>
+                    </div>
+                </div>
+            </div>
+            <small class="text-danger" data-action="message"></small>
         </div>
         <div class="form-group">
             <label for="input-phone-number" class="required">No Handphone</label>
@@ -93,15 +105,27 @@
         </div>
         <div class="form-group">
             <label for="input-username" class="required">Nama Pengguna</label>
-            <input
-                type="text"
-                id="input-username"
-                class="form-control"
-                name="user_name"
-                placeholder="{{ DBText::inputPlaceholder('Nama Pengguna') }}"
-                maxlength="100"
-                required
-            />
+            <div class="input-group">
+                <input
+                    type="text"
+                    id="input-username"
+                    class="form-control"
+                    name="user_name"
+                    placeholder="{{ DBText::inputPlaceholder('Nama Pengguna') }}"
+                    maxlength="100"
+                    data-toggle="validation"
+                    data-url="{{ route(DBRoutes::userCheck) }}"
+                    data-label="nama pengguna"
+                    data-field="user_name"
+                    required
+                />
+                <div class="input-group-append">
+                    <div class="input-group-text bg-transparent" data-action="icon">
+                        <i class="fa fa-user"></i>
+                    </div>
+                </div>
+            </div>
+            <small class="text-danger" data-action="message"></small>
         </div>
         <div class="form-group">
             <label for="input-password" class="required">Kata Sandi</label>

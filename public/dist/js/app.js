@@ -365,6 +365,83 @@ const FormComponents = {
                 $item.number(number, decimal, decimalPoint, thousandSeparator);
             });
         }
+    },
+    validation: {
+        selector: '[data-toggle=validation]',
+        keyData: {
+            valid: 'validation.is-valid',
+        },
+        init: function(elements, options = {}) {
+            if(elements === undefined || elements === null)
+                elements = $(FormComponents.validation.selector);
+
+            elements.each((i, item) => {
+                const $item = $(item);
+
+                let url = $item.data('url');
+                if(options.url !== undefined)
+                    url = options.url;
+
+                let label = $item.data('label');
+                if(options.label !== undefined)
+                    label = options.label;
+
+                let field = $item.data('field');
+                if(options.field !== undefined)
+                    field = options.field;
+
+                let id = $item.data('id');
+                if(options.id !== undefined)
+                    id = options.id;
+
+                $item.data(FormComponents.validation.keyData.valid, false);
+                $item.donetyping(() => {
+                    if($item.val() !== '') {
+                        $item.data(FormComponents.validation.keyData.valid, false);
+
+                        ServiceAjax.get(url, {
+                            data: {
+                                id: id,
+                                label: label,
+                                field: field,
+                                value: $item.val(),
+                            },
+                            success: (res) => {
+                                $item.data(FormComponents.validation.keyData.valid, res.result);
+
+                                const $parent = $item.closest('.form-group');
+                                const $message = $parent.find('[data-action=message]');
+                                const $icon = $parent.find('[data-action=icon]');
+
+                                if(!res.result) {
+                                    $message.html(res.message);
+                                    $icon.removeClass('text-success').addClass('text-danger')
+                                        .html($('<i>', {class: 'fa fa-times-circle'}));
+                                }
+                                else {
+                                    $message.empty();
+                                    $icon.addClass('text-success').removeClass('text-danger')
+                                        .html($('<i>', {class: 'fa fa-check-circle'}));
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+        },
+        isValid: function() {
+            let isValid = true;
+            const $elements = $(FormComponents.validation.selector);
+            for(let i = 0; i < $elements.length; i++) {
+                const $item = $($elements[i]);
+                if(!$item.data(FormComponents.validation.keyData.valid)) {
+                    isValid = false;
+                    break;
+                }
+            }
+
+            return isValid;
+        }
     }
 };
 

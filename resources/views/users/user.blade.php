@@ -54,6 +54,12 @@
                 },
             }
         ];
+        actions.callback.form.beforeSubmit = function() {
+            return FormComponents.validation.isValid();
+        }
+        actions.callback.onCreate = function() {
+            FormComponents.validation.init();
+        };
         actions.callback.form.onSetData = function(value, key, row, form) {
             const $el = form.find(`[name="${key}"]`);
             if(value != null && ['role_id', 'status_id'].includes(key)) {
@@ -68,7 +74,11 @@
                         $option.prop('checked', true);
                     }
                 });
+            }
 
+            else if(['email', 'user_name'].includes(key)) {
+                $el.attr('data-id', row.id);
+                FormComponents.validation.init($el);
             }
         };
         actions.detail = function(id) {

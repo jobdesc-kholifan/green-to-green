@@ -3,11 +3,12 @@
 class DBRoutes
 {
 
-    const authLogin = 'auth.login';
+    const authSignIn = 'auth.sign-in';
     const authLogout = 'auth.logout';
-
-    const authGoogleLogin = 'auth.google-login';
+    const authGoogleSignIn = 'auth.google-sign-in';
     const authCompleteSignUp = 'auth.complete-signup';
+    const authSignUp = 'auth.sign-up';
+    const authCheck = 'auth.check';
 
     const administrator = 'administrator';
 
@@ -17,4 +18,5 @@ class DBRoutes
     const configSelect = 'config.select';
 
     const user = 'user';
+    const userCheck = 'user.check';
 }

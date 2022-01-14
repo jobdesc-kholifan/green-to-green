@@ -8,7 +8,7 @@
     <ul class="navbar-nav ml-auto">
         <li class="nav-item"><div class="nav-link"></div></li>
         <li class="nav-item pt-1">
-            <a class="btn btn-sm btn-danger" data-toggle="tooltip" title="Keluar" href="{{ route(DBRoutes::authLogin) }}" aria-expanded="true">
+            <a class="btn btn-sm btn-danger" data-toggle="tooltip" title="Keluar" href="javascript:Auth.signOut()" aria-expanded="true">
                 <i class="fa fa-sign-out-alt"></i>
             </a>
         </li>

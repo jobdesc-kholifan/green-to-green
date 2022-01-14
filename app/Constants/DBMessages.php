@@ -3,8 +3,10 @@
 class DBMessages
 {
     const corruptData = "Data tidak ditemukan";
+    const existData = "%s %s sudah digunakan";
     const serverError = "Terjadi kendala pada sitem, segera hubungi admin untuk informasi lebih lanjut.";
 
+    const success = "Berhasil";
     const successCreate = "Data berhasil ditambahkan";
     const successUpdate = "Data berhasil diperbarui";
     const successDelete = "Data berhasil dihapus";

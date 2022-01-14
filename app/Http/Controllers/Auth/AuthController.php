@@ -29,16 +29,16 @@ class AuthController extends Controller
         $this->user = new User();
     }
 
-    public function login()
+    public function signIn()
     {
         try {
-            return $this->view('login');
+            return $this->view('signup');
         } catch (\Exception $e) {
             return $this->jsonError($e);
         }
     }
 
-    public function processLogin(Request $req)
+    public function processSignIn(Request $req)
     {
         try {
 
@@ -98,7 +98,7 @@ class AuthController extends Controller
         }
     }
 
-    public function processGoogleLogin(Request $req)
+    public function processGoogleSignIn(Request $req)
     {
         try {
             $email = $req->get('email');
@@ -174,6 +174,60 @@ class AuthController extends Controller
 
             return $this->jsonData([
                 'redirect' => url('/')
+            ]);
+        } catch (\Exception $e) {
+            return $this->jsonError($e);
+        }
+    }
+
+    public function skipSignUp(Request $req)
+    {
+        try {
+
+            $config = findConfig()->in([\DBTypes::statusActive, \DBTypes::roleUser]);
+            $insertUser = collect($req->only($this->user->getFillable()))
+                ->merge([
+                    'role_id' => $config->get(\DBTypes::roleUser)->getId(),
+                    'status_id' => $config->get(\DBTypes::statusActive)->getId(),
+                ]);
+
+            $user = $this->user->create($insertUser->toArray());
+
+            Auth::login($user);
+
+            return $this->jsonData([
+                'redirect' => url('/')
+            ]);
+        } catch (\Exception $e) {
+            return $this->jsonError($e);
+        }
+    }
+
+    public function signUp()
+    {
+        try {
+            return $this->view('register');
+        } catch (\Exception $e) {
+            return $this->jsonError($e);
+        }
+    }
+
+    public function processSignUp(Request $req)
+    {
+        try {
+            $config = findConfig()->in([\DBTypes::statusActive, \DBTypes::roleUser]);
+            $insertUser = collect($req->only($this->user->getFillable()))
+                ->merge([
+                    'user_password' => Hash::make($req->get('password')),
+                    'role_id' => $config->get(\DBTypes::roleUser)->getId(),
+                    'status_id' => $config->get(\DBTypes::statusActive)->getId(),
+                ]);
+            $user = $this->user->create($insertUser->toArray());
+
+            Auth::login($user);
+
+            return $this->jsonData([
+                'redirect' => url('/'),
             ]);
         } catch (\Exception $e) {
             return $this->jsonError($e);

@@ -8,6 +8,7 @@ use App\Models\Masters\User;
 use App\View\Components\Button;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -45,6 +46,9 @@ class UserController extends Controller
             $query = $this->user->defaultQuery();
 
             return datatables()->eloquent($query)
+                ->editColumn('gender', function($data) {
+                    return ['config_name' => !is_null($data->gender) ? $data->gender->config_name : ''];
+                })
                 ->addColumn('ttl', function($data) {
                     return sprintf("%s, %s", $data->place_of_birth, $data->date_of_birth);
                 })
@@ -87,7 +91,6 @@ class UserController extends Controller
     {
         try {
 
-            $config = findConfig()->in([\DBTypes::statusActive]);
             $insertUser = collect($req->only($this->user->getFillable()))
                 ->merge([
                     'user_password' => Hash::make($req->get('password')),
@@ -167,6 +170,31 @@ class UserController extends Controller
                     'user' => $user
                 ]),
             ]);
+        } catch (\Exception $e) {
+            return $this->jsonError($e);
+        }
+    }
+
+    public function check(Request $req)
+    {
+        try {
+            $label = $req->get('label');
+            $field = $req->get('field');
+            $value = $req->get('value');
+
+            $query = $this->user->select($field)
+                ->where($field, $value);
+
+            if($req->has('id')) {
+                $query->where('id', '!=', $req->get('id'));
+            }
+
+            $user = $query->first();
+
+            if(!is_null($user))
+                throw new \Exception(sprintf(\DBMessages::existData, ucfirst(strtolower($label)), $value), \DBCodes::authorizedError);
+
+            return $this->jsonSuccess(\DBMessages::success);
         } catch (\Exception $e) {
             return $this->jsonError($e);
         }

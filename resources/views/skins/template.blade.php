@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta name="google-signin-client_id" content="633918814298-v8d33u7o1g88cih18vakv32q2bbukrrk.apps.googleusercontent.com">
     <title>{{ $pageTitle }}</title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -29,6 +30,8 @@
 
     @include('skins.footer')
 </div>
+
+<div class="g-signin2 d-none" data-width="320" data-longtitle="true" data-onsuccess="onSignIn"></div>
 <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 <script src="{{ asset('plugins/jquery-number/jquery.number.min.js') }}"></script>
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -41,8 +44,12 @@
 <script src="{{ asset('plugins/lightbox/js/lightbox.min.js') }}"></script>
 <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
 <script src="{{ asset('dist/js/load.modal.js') }}"></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
 <script src="{{ asset('dist/js/jquery-classes.js') }}"></script>
 <script src="{{ asset('dist/js/app.js') }}"></script>
+<script type="text/javascript">
+    Auth.routes.logout = "{{ route(DBRoutes::authLogout) }}";
+</script>
 @stack('script-footer')
 </body>
 </html>

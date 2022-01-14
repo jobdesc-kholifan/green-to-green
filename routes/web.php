@@ -20,28 +20,28 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'auth'], function() {
-
-    Route::group(['middleware' => 'guest'], function() {
-        Route::get('login', [AuthController::class, 'login'])->name(DBRoutes::authLogin);
-        Route::post('login', [AuthController::class, 'processLogin']);
-        Route::post('google-login', [AuthController::class, 'processGoogleLogin'])->name(DBRoutes::authGoogleLogin);
-        Route::get('complete-signup', [AuthController::class, 'completeSignUp'])->name(DBRoutes::authCompleteSignUp);
-        Route::post('complete-signup', [AuthController::class, 'processCompleteSignUp']);
-    });
-
-    Route::get('logout', function(Request $req) {
-        Auth::logout();
-
-        session()->flush();
-
-        $req->session()->invalidate();
-
-        $req->session()->regenerateToken();
-
-        return redirect(\route(DBRoutes::authLogin));
-    })->name(DBRoutes::authLogout);
+Route::group(['middleware' => 'guest'], function() {
+    Route::get('sign-in', [AuthController::class, 'signIn'])->name(DBRoutes::authSignIn);
+    Route::post('sign-in', [AuthController::class, 'processSignIn']);
+    Route::post('google-login', [AuthController::class, 'processGoogleSignIn'])->name(DBRoutes::authGoogleSignIn);
+    Route::get('complete-signup', [AuthController::class, 'completeSignUp'])->name(DBRoutes::authCompleteSignUp);
+    Route::post('complete-signup', [AuthController::class, 'processCompleteSignUp']);
+    Route::post('complete-signup/skip', [AuthController::class, 'skipSignUp']);
+    Route::get('sign-up', [AuthController::class, 'signUp'])->name(DBRoutes::authSignUp);
+    Route::get('check', [UserController::class, 'check'])->name(DBRoutes::authCheck);
 });
+
+Route::get('logout', function(Request $req) {
+    Auth::logout();
+
+    session()->flush();
+
+    $req->session()->invalidate();
+
+    $req->session()->regenerateToken();
+
+    return redirect(\route(DBRoutes::authSignIn));
+})->name(DBRoutes::authLogout);
 
 Route::group(['middleware' => 'auth'], function() {
     Route::group(['prefix' => 'config'], function($query) {
@@ -73,6 +73,7 @@ Route::group(['middleware' => 'auth'], function() {
             Route::post('datatables', [UserController::class, 'datatables']);
             Route::get('form', [UserController::class, 'form']);
             Route::get('detail', [UserController::class, 'detail']);
+            Route::get('check', [UserController::class, 'check'])->name(DBRoutes::userCheck);
 
             Route::get('', [UserController::class, 'index'])->name(DBRoutes::user);
             Route::post('', [UserController::class, 'store']);

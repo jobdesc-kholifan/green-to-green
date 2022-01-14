@@ -23,7 +23,7 @@
             <form action="" method="post" id="form-login">
                 {{ csrf_field() }}
                 <div class="input-group mb-3">
-                    <input type="text" name="username" class="form-control" placeholder="Nama Pengguna / Email">
+                    <input type="text" name="username" class="form-control" placeholder="Nama Pengguna / Email" required>
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-user"></span>
@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div class="input-group mb-3">
-                    <input type="password" name="password" class="form-control" placeholder="Kata Sandi">
+                    <input type="password" name="password" class="form-control" placeholder="Kata Sandi" required>
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-lock"></span>
@@ -43,7 +43,10 @@
                     <button type="submit" class="btn btn-block btn-success mb-2">
                         <i class="fa fa-sign-in-alt"></i> Masuk
                     </button>
-                    <div class="g-signin2" data-width="320" data-longtitle="true" data-onsuccess="onSignIn"></div>
+                    <div class="g-signin2 mb-2" data-width="320" data-longtitle="true" data-onsuccess="onSignIn"></div>
+                    <a href="{{ route(DBRoutes::authSignUp) }}" class="btn btn-block btn-primary mb-2">
+                        <span>Daftar Sekarang</span>
+                    </a>
                 </div>
             </form>
         </div>
@@ -82,7 +85,7 @@
         const profile = googleUser.getBasicProfile();
         $formLogin.setDisabled(true);
 
-        ServiceAjax.post("{{ route(DBRoutes::authGoogleLogin) }}", {
+        ServiceAjax.post("{{ route(DBRoutes::authGoogleSignIn) }}", {
             data: {
                 _token: "{{ csrf_token() }}",
                 full_name: profile.getName(),
