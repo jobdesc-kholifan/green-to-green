@@ -10,7 +10,8 @@ class DBTypes
     const role = 'role';
     const roleAdministrator = 'role-administrator';
     const roleSuperuser = 'role-superuser';
-    const roleUser = 'role-user';
+    const roleStaff = 'role-staff';
+    const roleCustomer = 'role-customer';
 
     const gender = 'gender';
     const genderMan = 'laki-laki';
@@ -18,5 +19,7 @@ class DBTypes
 
     const tasks = 'task';
     const tasksCollectPlastic = 'task-collect-plastic';
-    const tasksCreatePickup = 'task-confirm-pickup';
+    const tasksCreatePickup = 'task-create-pickup';
+    const tasksRegister = 'task-register';
+    const tasksShare = 'task-share';
 }

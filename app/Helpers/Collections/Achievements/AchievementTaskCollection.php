@@ -48,7 +48,7 @@ class AchievementTaskCollection extends Collection
     }
 
     /**
-     * @return TasksCreateRequestPayload|TasksCollectPlasticPayload|null
+     * @return TasksCreateRequestPayload|TasksCollectPlasticPayload|TasksRegisterPayload|TaskPayloadCollection
      * */
     public function payload()
     {
@@ -60,6 +60,9 @@ class AchievementTaskCollection extends Collection
         else if($this->getTaskType()->getSlug() === \DBTypes::tasksCreatePickup)
             return new TasksCreateRequestPayload($payload);
 
-        return $payload;
+        else if($this->getTaskType()->getSlug() === \DBTypes::tasksRegister)
+            return new TasksRegisterPayload($payload);
+
+        return new TaskPayloadCollection($payload);
     }
 }

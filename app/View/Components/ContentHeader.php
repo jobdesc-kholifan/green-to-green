@@ -13,16 +13,19 @@ class ContentHeader extends Component
 
     public $breadcrumbs = array();
 
+    public $container;
+
     /**
      * Create a new component instance.
      *
      * @param $title
      */
-    public function __construct($title, $subTitle = '', $breadcrumbs = array())
+    public function __construct($title, $subTitle = '', $breadcrumbs = array(), $container = 'container-fluid')
     {
         $this->title = $title;
         $this->subTitle = $subTitle;
         $this->breadcrumbs = $breadcrumbs;
+        $this->container = $container;
     }
 
     public function isBreadcrumbActive($breadcrumb)

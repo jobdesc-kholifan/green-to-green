@@ -153,13 +153,13 @@ class AuthController extends Controller
     {
         try {
 
-            $config = findConfig()->in([\DBTypes::roleUser, \DBTypes::statusActive]);
+            $config = findConfig()->in([\DBTypes::roleCustomer, \DBTypes::statusActive]);
 
             $password = $req->get('password');
             $insertUser = collect($req->only($this->user->getFillable()))
                 ->merge([
                     'user_password' => Hash::make($password),
-                    'role_id' => $config->get(\DBTypes::roleUser)->getId(),
+                    'role_id' => $config->get(\DBTypes::roleCustomer)->getId(),
                     'status_id' => $config->get(\DBTypes::statusActive)->getId(),
                 ]);
             $user = UserCollection::create($insertUser->toArray());
@@ -184,10 +184,10 @@ class AuthController extends Controller
     {
         try {
 
-            $config = findConfig()->in([\DBTypes::statusActive, \DBTypes::roleUser]);
+            $config = findConfig()->in([\DBTypes::statusActive, \DBTypes::roleCustomer]);
             $insertUser = collect($req->only($this->user->getFillable()))
                 ->merge([
-                    'role_id' => $config->get(\DBTypes::roleUser)->getId(),
+                    'role_id' => $config->get(\DBTypes::roleCustomer)->getId(),
                     'status_id' => $config->get(\DBTypes::statusActive)->getId(),
                 ]);
 
@@ -215,11 +215,11 @@ class AuthController extends Controller
     public function processSignUp(Request $req)
     {
         try {
-            $config = findConfig()->in([\DBTypes::statusActive, \DBTypes::roleUser]);
+            $config = findConfig()->in([\DBTypes::statusActive, \DBTypes::roleCustomer]);
             $insertUser = collect($req->only($this->user->getFillable()))
                 ->merge([
                     'user_password' => Hash::make($req->get('password')),
-                    'role_id' => $config->get(\DBTypes::roleUser)->getId(),
+                    'role_id' => $config->get(\DBTypes::roleCustomer)->getId(),
                     'status_id' => $config->get(\DBTypes::statusActive)->getId(),
                 ]);
             $user = $this->user->create($insertUser->toArray());

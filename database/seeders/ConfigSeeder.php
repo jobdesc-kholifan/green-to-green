@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Helpers\Collections\Achievements\TasksCollectPlasticPayload;
 use App\Helpers\Collections\Achievements\TasksCreateRequestPayload;
+use App\Helpers\Collections\Achievements\TasksRegisterPayload;
 use App\Helpers\Collections\Configs\ConfigCollection;
 use App\Models\Masters\Config;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -42,12 +43,14 @@ class ConfigSeeder extends Seeder
         ConfigCollection::create(['slug' => \DBTypes::role, 'config_name' => 'Role'], [
             ['slug' => \DBTypes::roleSuperuser, 'config_name' => 'Superuser', 'created_at' => currentDate(), 'updated_at' => currentDate()],
             ['slug' => \DBTypes::roleAdministrator, 'config_name' => 'Administrator', 'created_at' => currentDate(), 'updated_at' => currentDate()],
-            ['slug' => \DBTypes::roleUser, 'config_name' => 'Pengguna', 'created_at' => currentDate(), 'updated_at' => currentDate()],
+            ['slug' => \DBTypes::roleCustomer, 'config_name' => 'Pelanggan', 'created_at' => currentDate(), 'updated_at' => currentDate()],
+            ['slug' => \DBTypes::roleStaff, 'config_name' => 'Staff', 'created_at' => currentDate(), 'updated_at' => currentDate()],
         ]);
 
         ConfigCollection::create(['slug' => \DBTypes::tasks, 'config_name' => 'Jenis Taks Achievement'], [
             ['slug' => \DBTypes::tasksCollectPlastic, 'config_name' => 'Mengumpulkan Plastik', 'payload' => (new TasksCollectPlasticPayload())->payload(), 'created_at' => currentDate(), 'updated_at' => currentDate()],
-            ['slug' => \DBTypes::tasksCreatePickup, 'config_name' => 'Membuat Request Pickup', 'payload' => (new TasksCreateRequestPayload())->payload(), 'created_at' => currentDate(), 'updated_at' => currentDate()]
+            ['slug' => \DBTypes::tasksCreatePickup, 'config_name' => 'Membuat Request Pickup', 'payload' => (new TasksCreateRequestPayload())->payload(), 'created_at' => currentDate(), 'updated_at' => currentDate()],
+            ['slug' => \DBTypes::tasksRegister, 'config_name' => 'Melakukan Pendaftaran', 'payload' => (new TasksRegisterPayload())->payload(), 'created_at' => currentDate(), 'updated_at' => currentDate()],
         ]);
     }
 }

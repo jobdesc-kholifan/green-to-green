@@ -5,6 +5,8 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Masters\AchievementController;
 use App\Http\Controllers\Masters\ConfigController;
 use App\Http\Controllers\Masters\UserController;
+use App\Http\Controllers\Users\RequestPickUpController;
+use App\Http\Controllers\Users\UserAchievementController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -52,6 +54,15 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     Route::get('/', [AppController::class, 'index']);
+
+    Route::group(['prefix' => 'achievement'], function() {
+
+        Route::get('', [UserAchievementController::class, 'index'])->name(DBRoutes::pageAchievement);
+    });
+
+    Route::group(['prefix' => 'pickup'], function() {
+        Route::get('', [RequestPickUpController::class, 'index'])->name(DBRoutes::pagePickUp);
+    });
 
     Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function() {
 

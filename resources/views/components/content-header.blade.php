@@ -1,5 +1,5 @@
 <section class="content-header">
-    <div class="container-fluid">
+    <div class="{{ empty($container) ? 'container-fluid' : $container }}">
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1>{{ $title }}</h1>
@@ -10,7 +10,7 @@
                     <li class="breadcrumb-item">
                         <a href="{{ url('/') }}" class="text-olive">
                             <span class="oi oi-home"></span>
-                            Dashboard
+                            Green to Green
                         </a>
                     </li>
                     @foreach($breadcrumbs as $breadcrumb)

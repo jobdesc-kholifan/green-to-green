@@ -19,4 +19,8 @@ class DBRoutes
 
     const user = 'user';
     const userCheck = 'user.check';
+
+    const pageAchievement = 'page.achievement';
+
+    const pagePickUp = 'page.pickup';
 }

@@ -172,7 +172,8 @@ const Auth = {
         var auth2 = gapi.auth2.getAuthInstance();
         await auth2.signOut();
 
-        window.location.href = Auth.routes.logout;
+        if(Auth.routes.logout !== null)
+            window.location.href = Auth.routes.logout;
     },
 }
 

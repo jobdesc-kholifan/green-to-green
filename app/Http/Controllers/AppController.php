@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 class AppController extends Controller
 {
 
+    protected $title = "Welcome to Green to Green";
+
     public function index()
     {
         try {
