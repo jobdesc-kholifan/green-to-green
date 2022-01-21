@@ -443,6 +443,18 @@ const FormComponents = {
 
             return isValid;
         }
+    },
+    customSelect: {
+        selector: '[data-toggle=custom-select]',
+        init: function(elements, options = {}) {
+            if(elements === undefined || elements === null)
+                elements = $(FormComponents.customSelect.selector);
+
+            elements.each((i, item) => {
+                const $item = $(item);
+                $item.customSelect(options);
+            });
+        }
     }
 };
 
@@ -524,5 +536,5 @@ const AlertNotif = {
 
             toastr.error(message)
         }
-    }
+    },
 };

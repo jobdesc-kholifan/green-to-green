@@ -21,6 +21,18 @@ class UserCollection extends Collection
         return new UserCollection($user->create($values));
     }
 
+    /**
+     * @return UserCollection
+     * */
+    static public function current()
+    {
+        /* @var User|Relation $user */
+        $user = new User();
+        return new UserCollection(
+            $user->defaultQuery()->find(auth()->id())
+        );
+    }
+
     public function getId()
     {
         return $this->get('id');

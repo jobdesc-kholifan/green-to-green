@@ -218,8 +218,76 @@ dl.row.font-size-md > dt, dl.row.font-size-md > dd {
 .border-olive {
     border-color: #3d9970!important;
 }
+.cursor-text {
+    cursor: text;
+}
+.rounded-50 {
+    border-radius: 50px;
+}
 .rounded-top-0 {
     border-top-left-radius: 0!important;
     border-top-right-radius: 0!important;
 }
+.pac-container { z-index: 100000 !important; }
 
+.custom-select-rounded.open .rounded-pill {
+    border-bottom: #fff!important;
+    border-bottom-left-radius: 0!important;
+    border-bottom-right-radius: 0!important;
+    border-top-left-radius: 25px!important;
+    border-top-right-radius: 25px!important;
+}
+.list-options {
+    display: none;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border: 1px solid #3d9970;
+    border-top-color: transparent;
+    padding-bottom: 10px;
+    background-color: #f8f9fa;
+    max-height: 400px;
+    overflow: auto;
+}
+.custom-select-rounded.open > .list-options {
+    display: block;
+    position: fixed;
+    z-index: 9999;
+}
+
+.list-options > .options {
+    padding: 12px 25px;
+    color: #777777;
+}
+.list-options > .options:hover {
+    cursor: pointer;
+    color: #3d9970;
+}
+.nav-pills.nav-olive .nav-link.active, .nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: #3d9970;
+}
+.nav-pills.nav-olive .nav-link:not(.active):hover {
+    color: #3d9970;
+}
+.card.card-lock:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, .5);
+    z-index: 9999;
+    border-radius: 5px;
+}
+.card.card-lock:hover {
+    cursor: not-allowed;
+}
+.card.card-lock .card-lock-icon {
+    position: absolute;
+    z-index: 99999;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    top: 40%;
+}

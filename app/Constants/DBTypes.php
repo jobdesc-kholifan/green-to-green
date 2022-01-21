@@ -22,4 +22,11 @@ class DBTypes
     const tasksCreatePickup = 'task-create-pickup';
     const tasksRegister = 'task-register';
     const tasksShare = 'task-share';
+
+    const statusOrder = 'status-order';
+    const statusOrderNew = 'status-order-new';
+    const statusOrderInPickup = 'status-order-in-pickup';
+    const statusOrderDone = 'status-order-done';
+
+    const rubbishCategory = 'rubbish-category';
 }

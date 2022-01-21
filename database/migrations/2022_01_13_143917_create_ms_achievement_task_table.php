@@ -15,8 +15,8 @@ class CreateMsAchievementTaskTable extends Migration
     {
         Schema::create('ms_achievement_task', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('achievement_id');
-            $table->unsignedBigInteger('task_type_id');
+            $table->unsignedBigInteger('achievement_id')->unsigned();
+            $table->unsignedBigInteger('task_type_id')->unsigned();
             $table->text('payload');
 
             $table->timestamps();

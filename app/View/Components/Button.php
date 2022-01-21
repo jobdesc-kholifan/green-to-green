@@ -6,16 +6,19 @@ class Button
 {
 
     const btnPrimary = 'btn-outline-primary';
+    const btnPrimarySolid = 'btn-primary';
     const btnSecondary = 'btn-outline-secondary';
     const btnDanger = 'btn-outline-danger';
     const btnSuccess = 'btn-outline-success';
     const btnInfo = 'btn-info';
     const btnLinkPrimary = 'btn-link';
+    const btnOlive = 'bg-olive';
 
     const btnIconEdit = '<i class="fa fa-edit"></i>';
     const btnIconDelete = '<i class="fa fa-trash"></i>';
     const btnIconInfo = '<i class="fa fa-info-circle"></i>';
     const btnIconPrint = '<i class="fa fa-print"></i>';
+    const btnCalendar = '<i class="fa fa-calendar"></i>';
     const btnIconFile = '<i class="fa fa-file-alt"></i>';
     const btnIconApproved = '<i class="fa fa-check"></i>';
     const btnIconFileDownload = '<i class="fa fa-file-download"></i>';

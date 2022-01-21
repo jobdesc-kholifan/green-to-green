@@ -26,6 +26,12 @@
                         <p>Users</p>
                     </a>
                 </li>
+                <li class="nav-item{{ isParentMenuOpen(DBRoutes::order, $route) }}">
+                    <a href="{{ route(DBRoutes::order) }}" class="nav-link{{ isMenuActive($route, DBRoutes::order) }}">
+                        <i class="nav-icon fas fa-user"></i>
+                        <p>Order Pickup</p>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>

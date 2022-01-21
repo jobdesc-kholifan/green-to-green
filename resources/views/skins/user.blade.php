@@ -27,8 +27,12 @@ $user = new UserCollection(User::foreignWith(null)
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dist/css/custom-style.css') }}">
+    @stack('script-header')
 </head>
 <body class="hold-transition layout-top-nav">
 <div class="wrapper">
@@ -65,12 +69,19 @@ $user = new UserCollection(User::foreignWith(null)
 </div>
 <div class="g-signin2 d-none" data-width="320" data-longtitle="true" data-onsuccess="onSignIn"></div>
 
+<script src="https://apis.google.com/js/platform.js" async defer></script>
 <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
-<script src="https://apis.google.com/js/platform.js" async defer></script>
 <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
+<script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
+<script src="{{ asset('dist/js/custom-select.js') }}"></script>
+<script src="{{ asset('dist/js/load.modal.js') }}"></script>
+<script src="{{ asset('dist/js/jquery-classes.js') }}"></script>
 <script src="{{ asset('dist/js/app.js') }}"></script>
+@stack('script-footer')
 <script type="text/javascript">
     Auth.routes.logout = "{{ route(DBRoutes::authLogout) }}";
 </script>

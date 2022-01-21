@@ -65,4 +65,12 @@ class AchievementTaskCollection extends Collection
 
         return new TaskPayloadCollection($payload);
     }
+
+    /**
+     * @return TasksCreateRequestPayload|TasksCollectPlasticPayload|TasksRegisterPayload|TaskPayloadCollection
+     * */
+    public function user_payload()
+    {
+        return $this->get('user_payload');
+    }
 }

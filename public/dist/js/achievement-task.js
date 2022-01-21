@@ -69,6 +69,7 @@ TaskForm.prototype.renderForm = function(payload) {
     const jsonPayload = JSON.parse(payload);
 
     this.$wrapperForm.empty();
+    console.log(jsonPayload.elements);
     jsonPayload.elements.forEach((element) => {
         const $element = $(element.tag);
         Object.keys(element.attributes).forEach((key) => {
@@ -96,8 +97,26 @@ TaskForm.prototype.renderForm = function(payload) {
             this.$.data(AchievementConfig.keyData).payload = jsonPayload;
         });
 
+        if(element.tag === '<select>') {
+            $element.on('change', () => {
+                jsonPayload.requirement[element.name] = {
+                    value: $element.val(),
+                    text: $element.find('option:selected').text()
+                };
+                this.$.data(AchievementConfig.keyData).payload = jsonPayload;
+            });
+        }
+
         if(jsonPayload.requirement !== undefined && jsonPayload.requirement[element.name])
-            $element.val(jsonPayload.requirement[element.name]);
+            if(element.tag === '<select>' && jsonPayload.requirement[element.name] !== null) {
+                $element.append($('<option>', {value: jsonPayload.requirement[element.name].value}).text(jsonPayload.requirement[element.name].text));
+                console.log("here");
+            } else {
+                console.log(jsonPayload.requirement[element.name]);
+                $element.val(jsonPayload.requirement[element.name])
+            }
+
+        FormComponents.select2.init();
     });
 };
 

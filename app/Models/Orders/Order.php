@@ -1,47 +1,32 @@
 <?php
 
-namespace App\Models\Masters;
+namespace App\Models\Orders;
 
+use App\Models\Masters\Config;
+use App\Models\Masters\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Carbon;
 
-class User extends Authenticatable
+class Order extends Model
 {
     use HasFactory;
 
-    protected $table = "ms_users";
+    protected $table = "tr_order";
 
     protected $fillable = [
-        'full_name',
-        'gender_id',
-        'place_of_birth',
-        'date_of_birth',
-        'email',
-        'phone_number',
-        'user_name',
-        'user_password',
-        'role_id',
-        'status_id'
+        'user_id',
+        'lat_lng',
+        'address',
+        'driver_note',
+        'status_id',
     ];
 
     public $defaultSelects = [
-        'full_name',
-        'place_of_birth',
-        'date_of_birth',
-        'email',
-        'phone_number',
-        'user_name',
-        'address'
+        'lat_lng',
+        'tr_order.address',
+        'driver_note',
     ];
-
-    public function getDateOfBirthAttribute($value)
-    {
-        return is_null($value) ? null : Carbon::createFromTimestamp(strtotime($value))
-            ->setTimezone(env('APP_TIMEZONE'))
-            ->format('d/m/Y') ;
-    }
 
     /**
      * static function yang digunakan ketika memanggil with biar tidak perlu
@@ -54,7 +39,7 @@ class User extends Authenticatable
      * */
     static public function foreignWith($query, $selects = null)
     {
-        $model = new User();
+        $model = new Order();
         return $model->defaultWith(is_null($selects) ? $model->defaultSelects : $selects, $query);
     }
 
@@ -62,7 +47,7 @@ class User extends Authenticatable
      * function untuk setting default with apa saja yang akan sering dipakai
      * tetapi jangan banyak-banyak karena akan memperngaruhi proses loading page
      *
-     * @param Relation|User $query
+     * @param Relation|Order $query
      * @param array $selects
      *
      * @return Relation
@@ -70,17 +55,14 @@ class User extends Authenticatable
     private function _defaultWith($query, $selects = [])
     {
         return $query->with([
-            'gender' => function($query) {
-                Config::foreignWith($query);
-            }
-        ])->select($this->getKeyName(), 'gender_id')->addSelect($selects);
+        ])->select(sprintf("%s.%s", $this->getTable(), $this->getKeyName()))->addSelect($selects);
     }
 
     /**
      * function defaultWith yang digunakan untuk dipanggil public
      *
      * @param array $selects
-     * @param Relation|User|null $query
+     * @param Relation|Order|null $query
      *
      * @return Relation
      * */
@@ -89,14 +71,9 @@ class User extends Authenticatable
         return $this->_defaultWith(is_null($query) ? $this : $query, $selects);
     }
 
-    public function getAuthPassword()
+    public function user()
     {
-        return $this->user_password;
-    }
-
-    public function role()
-    {
-        return $this->hasOne(Config::class, 'id', 'role_id');
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 
     public function status()
@@ -104,22 +81,17 @@ class User extends Authenticatable
         return $this->hasOne(Config::class, 'id', 'status_id');
     }
 
-    public function gender()
-    {
-        return $this->hasOne(Config::class, 'id', 'gender_id');
-    }
-
     public function defaultQuery()
     {
         return $this->defaultWith($this->defaultSelects)
             ->with([
+                'user' => function($query) {
+                    User::foreignWith($query);
+                },
                 'status' => function($query) {
                     Config::foreignWith($query);
                 },
-                'role' => function($query) {
-                    Config::foreignWith($query);
-                },
             ])
-            ->addSelect('role_id', 'status_id');
+            ->addSelect('user_id', 'tr_order.status_id');
     }
 }

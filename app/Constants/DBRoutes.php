@@ -23,4 +23,8 @@ class DBRoutes
     const pageAchievement = 'page.achievement';
 
     const pagePickUp = 'page.pickup';
+
+    const order = 'order';
+
+    const profile = 'profile';
 }

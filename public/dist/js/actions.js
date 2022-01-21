@@ -145,7 +145,7 @@ const ActionsDatatable = function(actions) {
 
     this.serverSide = true;
 
-    this.url = this._actions.routes.datatable !== null ? this._actions.routes.datatable : `${this._actions.routes.index}/datatables`;
+    this.url = null;
 
     this.type = 'post';
 
@@ -153,6 +153,7 @@ const ActionsDatatable = function(actions) {
 };
 
 ActionsDatatable.prototype.init = function() {
+    this.url = this._actions.routes.datatable !== null ? this._actions.routes.datatable : `${this._actions.routes.index}/datatables`;
     this.context = $(this._actions.selectors.table).DataTable({
         dom: this.dom,
         order: this.order,
@@ -173,6 +174,10 @@ ActionsDatatable.prototype.init = function() {
 
 ActionsDatatable.prototype.reload = function(reset = null, position = false) {
     this.context.ajax.reload(reset, position);
+};
+
+const ActionsOptions = function(options) {
+
 };
 
 const Actions = function(url) {

@@ -151,6 +151,7 @@ class AchievementController extends Controller
 
             $tasks = json_decode($req->get('tasks'));
             foreach($tasks as $task) {
+                $jsonPayload = !is_string($task->payload) ? json_encode($task->payload) : $task->payload;
                 if(!empty($task->id)) {
                     $row = $this->achievementTask->find($task->id);
 
@@ -159,7 +160,7 @@ class AchievementController extends Controller
 
                     $row->update([
                         'task_type_id' => $task->task_type_id,
-                        'payload' => $task->payload,
+                        'payload' => $jsonPayload,
                     ]);
                 }
 
@@ -167,7 +168,7 @@ class AchievementController extends Controller
                     AchievementTaskCollection::create([
                         'achievement_id' => $achievement->getId(),
                         'task_type_id' => $task->task_type->id,
-                        'payload' => json_encode($task->payload),
+                        'payload' => $jsonPayload ,
                     ]);
                 }
             }

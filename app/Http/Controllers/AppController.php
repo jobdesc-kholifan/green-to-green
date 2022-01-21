@@ -2,15 +2,63 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Masters\User;
+use App\Models\Orders\Order;
+use App\View\Components\Button;
+
 class AppController extends Controller
 {
 
     protected $title = "Welcome to Green to Green";
 
+    protected $order;
+
     public function index()
     {
         try {
-            return $this->view('home');
+
+            $configs = findConfig()->parentIn([\DBTypes::statusOrder, \DBTypes::rubbishCategory]);
+            return $this->view('home', [
+                'statues' => $configs->children(\DBTypes::statusOrder),
+                'categoryRubbish' => $configs->children(\DBTypes::rubbishCategory),
+            ]);
+        } catch (\Exception $e) {
+            return $this->jsonError($e);
+        }
+    }
+
+    public function datatablesOrder()
+    {
+        try {
+            $this->order = new Order();
+
+            $query = $this->order->defaultWith($this->order->defaultSelects)
+                ->with([
+                    'user' => function($query) {
+                        User::foreignWith($query);
+                    }
+                ])
+                ->addSelect('created_at', 'user_id')
+                ->where('user_id', auth()->id());
+
+            return datatables()->eloquent($query)
+                ->editColumn('created_at', function($data) {
+                    return dbDate($data->created_at, 'd F Y');
+                })
+                ->editColumn('address', function($data) {
+                    return sprintf("%s ...", substr($data->address,0, 50));
+                })
+                ->editColumn('driver_note', function($data) {
+                    return !is_null($data->driver_note) ? sprintf("%s ...", substr($data->driver_note, 0, 50)) : '';
+                })
+                ->addColumn('action', function($data) {
+                    $btnDetail = (new Button("actions.detail($data->id)", Button::btnOlive, Button::btnIconInfo))
+                        ->setLabel("Lihat Detail")
+                        ->render();
+
+                    return \DBText::renderAction([$btnDetail]);
+                })
+                ->toJson();
         } catch (\Exception $e) {
             return $this->jsonError($e);
         }

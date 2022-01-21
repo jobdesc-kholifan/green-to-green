@@ -5,9 +5,21 @@ namespace App\Helpers\Collections\Achievements;
 class TasksCreateRequestPayload extends TaskPayloadCollection
 {
 
+    protected $requirement = [
+        'count' => null,
+        'description' => null,
+    ];
+
     public function getCount()
     {
         return $this->get('count');
+    }
+
+    public function setCount($value)
+    {
+        $this->set('count', $value);
+
+        return $this;
     }
 
     public function getDesc($formatted = false)
@@ -26,6 +38,15 @@ class TasksCreateRequestPayload extends TaskPayloadCollection
         }
 
         return $description;
+    }
+
+    public function createPayload()
+    {
+        return json_encode([
+            'requirement' => [
+                'count' => $this->getCount(),
+            ],
+        ]);
     }
 
     public function payload()
@@ -61,5 +82,18 @@ class TasksCreateRequestPayload extends TaskPayloadCollection
                 'description' => $this->getDesc(),
             ],
         ]);
+    }
+
+    public function points($payload)
+    {
+        $compare = new TasksCreateRequestPayload($payload);
+        $complete = $this->getCount() == $compare->getCount();
+
+        return $complete ? 100 : 0;
+    }
+
+    public function messages($payload)
+    {
+        return '';
     }
 }

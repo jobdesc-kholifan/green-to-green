@@ -52,5 +52,18 @@ class ConfigSeeder extends Seeder
             ['slug' => \DBTypes::tasksCreatePickup, 'config_name' => 'Membuat Request Pickup', 'payload' => (new TasksCreateRequestPayload())->payload(), 'created_at' => currentDate(), 'updated_at' => currentDate()],
             ['slug' => \DBTypes::tasksRegister, 'config_name' => 'Melakukan Pendaftaran', 'payload' => (new TasksRegisterPayload())->payload(), 'created_at' => currentDate(), 'updated_at' => currentDate()],
         ]);
+
+        ConfigCollection::create(['slug' => \DBTypes::statusOrder, 'config_name' => 'Status Pesanan'], [
+           ['slug' => \DBTypes::statusOrderNew, 'config_name' => 'Pesanan Baru', 'created_at' => currentDate(), 'updated_at' => currentDate()],
+           ['slug' => \DBTypes::statusOrderInPickup, 'config_name' => 'Proses Pengambilan', 'created_at' => currentDate(), 'updated_at' => currentDate()],
+           ['slug' => \DBTypes::statusOrderDone, 'config_name' => 'Selesai', 'created_at' => currentDate(), 'updated_at' => currentDate()],
+        ]);
+
+        ConfigCollection::create(['slug' => \DBTypes::rubbishCategory, 'config_name' => 'Kategori Sampah'], [
+            ['config_name' => 'Plastik Makanan', 'created_at' => currentDate(), 'updated_at' => currentDate()],
+            ['config_name' => 'Plastik Peralatan Makan', 'created_at' => currentDate(), 'updated_at' => currentDate()],
+            ['config_name' => 'Plastik Alat Elektronik', 'created_at' => currentDate(), 'updated_at' => currentDate()],
+            ['config_name' => 'Plastik Lemari', 'created_at' => currentDate(), 'updated_at' => currentDate()],
+        ]);
     }
 }

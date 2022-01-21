@@ -16,7 +16,7 @@ class CreateMsUsersTable extends Migration
         Schema::create('ms_users', function (Blueprint $table) {
             $table->id();
             $table->string('full_name');
-            $table->bigInteger('gender_id')->nullable();
+            $table->bigInteger('gender_id')->unsigned()->nullable();
             $table->string('place_of_birth', 25)->nullable();
             $table->date('date_of_birth')->nullable();
             $table->text('address')->nullable();
@@ -24,10 +24,27 @@ class CreateMsUsersTable extends Migration
             $table->string('phone_number', 15)->nullable();
             $table->string('user_name', 100)->nullable();
             $table->text('user_password')->nullable();
-            $table->bigInteger('role_id');
-            $table->bigInteger('status_id');
+            $table->bigInteger('role_id')->unsigned();
+            $table->bigInteger('status_id')->unsigned();
 
             $table->timestamps();
+
+            $table->index(['gender_id', 'role_id', 'status_id']);
+
+            $table->foreign('gender_id')
+                ->references('id')->on('ms_configs')
+                ->onDelete('restrict')
+                ->onUpdate('restrict');
+
+            $table->foreign('role_id')
+                ->references('id')->on('ms_configs')
+                ->onDelete('restrict')
+                ->onUpdate('restrict');
+
+            $table->foreign('status_id')
+                ->references('id')->on('ms_configs')
+                ->onDelete('restrict')
+                ->onUpdate('restrict');
         });
     }
 

@@ -1,3 +1,10 @@
+<?php
+
+/**
+ * @var \App\Helpers\Collections\Configs\ConfigArray $statues
+ * */
+
+?>
 @extends('skins.user')
 
 @section('content')
@@ -32,82 +39,67 @@
                             <h5 class="card-title text-bold mb-2">Set Up Your Profile</h5>
 
                             <p class="card-text">Customize your own profile right here!</p>
-                            <a href="#" class="card-link text-white">Cuztomize Profile</a>
+                            <a href="{{ route(DBRoutes::profile) }}" class="card-link text-white">Cuztomize Profile</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="container mb-3">
-            <h3 class="mb-3">Daftar Request Pickup</h3>
             <div class="row">
                 <div class="col-3">
-                    <div class="position-relative rounded bg-lightblue shadow cursor-pointer">
-                        <div class="px-3 py-2 card-text">
-                            <h4 class="text-bold mb-0">Nama Pengguna</h4>
-                            <div class="d-flex justify-content-start align-items-center mb-3">
-                                <p class="mb-0">Note dari pelanggan</p>
-                            </div>
-                            <div class="d-flex justify-content-start align-items-center">
-                                <i class="fa fa-calendar mr-2"></i>
-                                <p class="mb-0">17 Januari 2022</p>
-                            </div>
-                            <div class="d-flex justify-content-start align-items-center">
-                                <i class="fa fa-map-marker-alt mr-2"></i>
-                                <p class="mb-0">Jl Abdul Gani GG III No 19</p>
-                            </div>
-                            <div class="mb-4"></div>
+                    <h5 class="mb-2">Filter</h5>
+                    <div class="font-weight-normal mb-1">Status</div>
+                    @foreach($statues->all() as $status)
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="customCheckbox5">
+                            <label for="customCheckbox5" class="custom-control-label font-weight-light">{{ $status->getName() }}</label>
                         </div>
-                        <div class="text-center py-2 bg-lightblue rounded-bottom rounded-top-0">
-                            <span>Lihat Detail</span>
+                    @endforeach
+                    <div class="font-weight-normal mt-3 mb-1">Kategori Sampah</div>
+                    @foreach($categoryRubbish->all() as $category)
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="customCheckbox5">
+                            <label for="customCheckbox5" class="custom-control-label font-weight-light">{{ $category->getName() }}</label>
                         </div>
+                    @endforeach
+                    <div class="mt-3">
+                        <button type="button" class="btn bg-olive btn-block btn-sm">
+                            <i class="fa fa-filter mr-2"></i>
+                            <span>Filter</span>
+                        </button>
                     </div>
                 </div>
-                <div class="col-3">
-                    <div class="position-relative rounded bg-warning shadow cursor-pointer">
-                        <div class="px-3 py-2 card-text">
-                            <h4 class="text-bold mb-0">Nama Pengguna</h4>
-                            <div class="d-flex justify-content-start align-items-center mb-3">
-                                <p class="mb-0">Note dari pelanggan</p>
-                            </div>
-                            <div class="d-flex justify-content-start align-items-center">
-                                <i class="fa fa-calendar mr-2"></i>
-                                <p class="mb-0">17 Januari 2022</p>
-                            </div>
-                            <div class="d-flex justify-content-start align-items-center">
-                                <i class="fa fa-map-marker-alt mr-2"></i>
-                                <p class="mb-0">Jl Abdul Gani GG III No 19</p>
-                            </div>
-                            <div class="mb-4"></div>
-                        </div>
-                        <div class="text-center py-2 bg-warning rounded-bottom rounded-top-0">
-                            <span>Selesaikan</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="position-relative rounded bg-success shadow cursor-pointer">
-                        <div class="px-3 py-2 card-text">
-                            <h4 class="text-bold mb-0">Nama Pengguna</h4>
-                            <div class="d-flex justify-content-start align-items-center mb-3">
-                                <p class="mb-0">Note dari pelanggan</p>
-                            </div>
-                            <div class="d-flex justify-content-start align-items-center">
-                                <i class="fa fa-calendar mr-2"></i>
-                                <p class="mb-0">17 Januari 2022</p>
-                            </div>
-                            <div class="d-flex justify-content-start align-items-center">
-                                <i class="fa fa-map-marker-alt mr-2"></i>
-                                <p class="mb-0">Jl Abdul Gani GG III No 19</p>
-                            </div>
-                            <div class="mb-4"></div>
-                        </div>
-                        <div class="text-center py-2 bg-success rounded-bottom rounded-top-0">
-                            <span>Telah Diambil</span>
-                        </div>
+                <div class="col-9">
+                    <h5 class="mb-4">Daftar Transaksi</h5>
+                    <div class="w-100">
+                        <table class="table table-striped table-hover" id="table-data">
+                            <thead>
+                            <tr>
+                                <th data-data="user.full_name">Nama</th>
+                                <th data-data="created_at">Tanggal</th>
+                                <th data-data="address">Alamat</th>
+                                <th data-data="driver_note">Catatan</th>
+                                <th data-data="action" data-searchable="false" data-orderable="false" style="width: 100px">Aksi</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
+@push('script-footer')
+    <script src="{{ asset('dist/js/actions.js') }}"></script>
+    <script type="text/javascript">
+        const actions = new Actions("{{ url()->current() }}");
+        actions.datatable.params = {
+            _token: "{{ csrf_token() }}",
+        };
+        actions.routes.datatable = "{{ url()->current() }}/datatables-order";
+        actions.build();
+    </script>
+@endpush

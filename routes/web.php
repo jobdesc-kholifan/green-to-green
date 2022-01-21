@@ -5,6 +5,8 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Masters\AchievementController;
 use App\Http\Controllers\Masters\ConfigController;
 use App\Http\Controllers\Masters\UserController;
+use App\Http\Controllers\Orders\OrderController;
+use App\Http\Controllers\Profiles\ProfileController;
 use App\Http\Controllers\Users\RequestPickUpController;
 use App\Http\Controllers\Users\UserAchievementController;
 use Illuminate\Http\Request;
@@ -54,6 +56,12 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     Route::get('/', [AppController::class, 'index']);
+    Route::post('/datatables-order', [AppController::class, 'datatablesOrder']);
+
+    Route::group(['prefix' => 'profile'], function() {
+
+        Route::get('', [ProfileController::class, 'index'])->name(DBRoutes::profile);
+    });
 
     Route::group(['prefix' => 'achievement'], function() {
 
@@ -61,7 +69,11 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     Route::group(['prefix' => 'pickup'], function() {
+        Route::get('maps', [RequestPickUpController::class, 'maps']);
+        Route::get('add', [RequestPickUpController::class, 'formAdd']);
+
         Route::get('', [RequestPickUpController::class, 'index'])->name(DBRoutes::pagePickUp);
+        Route::post('', [RequestPickUpController::class, 'store']);
     });
 
     Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function() {
@@ -91,6 +103,14 @@ Route::group(['middleware' => 'auth'], function() {
             Route::get('{id}', [UserController::class, 'show']);
             Route::post('{id}', [UserController::class, 'update']);
             Route::delete('{id}', [UserController::class, 'destroy']);
+        });
+
+        Route::group(['prefix' => 'order'], function() {
+            Route::post('datatables', [OrderController::class, 'datatables']);
+            Route::get('schedule', [OrderController::class, 'schedule']);
+            Route::get('detail', [OrderController::class, 'detail']);
+
+            Route::get('', [OrderController::class, 'index'])->name(DBRoutes::order);
         });
     });
 });

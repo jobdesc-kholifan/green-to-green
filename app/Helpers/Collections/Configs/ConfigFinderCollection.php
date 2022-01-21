@@ -51,7 +51,7 @@ class ConfigFinderCollection extends CollectionFinder
      * Ambil data child dari tipe yang dicari
      *
      * @param string|null $keyValue
-     * @return ConfigCollection[]
+     * @return ConfigArray
      * @throws \Exception
      * */
     public function children($keyValue = null)
@@ -67,6 +67,6 @@ class ConfigFinderCollection extends CollectionFinder
             return $data->parent()->get($this->key) == $keyValue;
         });
 
-        return $data->toArray();
+        return new ConfigArray($data->toArray());
     }
 }

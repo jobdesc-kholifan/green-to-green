@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMsAchievementTable extends Migration
+class CreateTrOrderTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,22 @@ class CreateMsAchievementTable extends Migration
      */
     public function up()
     {
-        Schema::create('ms_achievement', function (Blueprint $table) {
+        Schema::create('tr_order', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 100);
-            $table->text('description')->nullable();
+            $table->bigInteger('user_id')->unsigned();
+            $table->string('lat_lng',50);
+            $table->string('address')->nullable();
+            $table->text('driver_note')->nullable();
             $table->bigInteger('status_id')->unsigned();
 
             $table->timestamps();
 
-            $table->index(['status_id']);
+            $table->index(['user_id', 'status_id']);
+
+            $table->foreign('user_id')
+                ->references('id')->on('ms_users')
+                ->onDelete('restrict')
+                ->onUpdate('restrict');
 
             $table->foreign('status_id')
                 ->references('id')->on('ms_configs')
@@ -37,6 +44,6 @@ class CreateMsAchievementTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ms_achievement');
+        Schema::dropIfExists('tr_order');
     }
 }

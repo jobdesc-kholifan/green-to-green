@@ -1,28 +1,29 @@
 <?php
 
-namespace App\Models\Achievements;
+namespace App\Models\Users;
 
-use App\Models\Masters\Config;
-use App\Models\Users\UserAchievement;
+use App\Models\Achievements\Achievement;
+use App\Models\Achievements\AchievementTask;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-class Achievement extends Model
+class UserAchievement extends Model
 {
     use HasFactory;
 
-    protected $table = "ms_achievement";
+    protected $table = "usr_achievement";
 
     protected $fillable = [
-        'title',
-        'description',
-        'status_id',
+        "user_id",
+        "achievement_id",
+        "points",
+        "percentage",
     ];
 
     public $defaultSelects = [
-        'title',
-        'description',
+        "points",
+        "percentage"
     ];
 
     /**
@@ -36,7 +37,7 @@ class Achievement extends Model
      * */
     static public function foreignWith($query, $selects = null)
     {
-        $model = new Achievement();
+        $model = new UserAchievement();
         return $model->defaultWith(is_null($selects) ? $model->defaultSelects : $selects, $query);
     }
 
@@ -44,7 +45,7 @@ class Achievement extends Model
      * function untuk setting default with apa saja yang akan sering dipakai
      * tetapi jangan banyak-banyak karena akan memperngaruhi proses loading page
      *
-     * @param Relation|Achievement $query
+     * @param Relation|UserAchievement $query
      * @param array $selects
      *
      * @return Relation
@@ -52,14 +53,23 @@ class Achievement extends Model
     private function _defaultWith($query, $selects = [])
     {
         return $query->with([
-        ])->select($this->getKeyName())->addSelect($selects);
+            'achievement' => function($query) {
+                Achievement::foreignWith($query)
+                    ->with([
+                        'tasks' => function($query) {
+                            AchievementTask::foreignWith($query)
+                                ->addSelect('achievement_id');
+                        }
+                    ]);
+            }
+        ])->select($this->getKeyName(), 'achievement_id')->addSelect($selects);
     }
 
     /**
      * function defaultWith yang digunakan untuk dipanggil public
      *
      * @param array $selects
-     * @param Relation|Achievement|null $query
+     * @param Relation|UserAchievement|null $query
      *
      * @return Relation
      * */
@@ -68,29 +78,24 @@ class Achievement extends Model
         return $this->_defaultWith(is_null($query) ? $this : $query, $selects);
     }
 
-    public function status()
+    public function achievement()
     {
-        return $this->hasOne(Config::class, 'id', 'status_id');
+        return $this->hasOne(Achievement::class, 'id', 'achievement_id');
     }
 
-    public function tasks()
+    public function user_tasks()
     {
-        return $this->hasMany(AchievementTask::class, 'achievement_id', 'id');
-    }
-
-    public function user_achievement()
-    {
-        return $this->hasOne(UserAchievement::class, 'achievement_id', 'id');
+        return $this->hasMany(UserAchievementTask::class, 'user_achievement_id', 'id');
     }
 
     public function defaultQuery()
     {
         return $this->defaultWith($this->defaultSelects)
             ->with([
-                'status' => function($query) {
-                    Config::foreignWith($query);
+                'user_tasks' => function($query) {
+                    UserAchievementTask::foreignWith($query)
+                        ->addSelect('user_achievement_id');
                 }
-            ])
-            ->addSelect('status_id');
+            ]);
     }
 }

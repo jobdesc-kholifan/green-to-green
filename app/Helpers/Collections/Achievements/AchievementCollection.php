@@ -4,6 +4,8 @@ namespace App\Helpers\Collections\Achievements;
 
 use App\Helpers\Collections\Collection;
 use App\Helpers\Collections\Configs\ConfigCollection;
+use App\Helpers\Collections\Users\UserAchievementArray;
+use App\Helpers\Collections\Users\UserAchievementCollection;
 use App\Models\Achievements\Achievement;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
@@ -61,5 +63,13 @@ class AchievementCollection extends Collection
             return new AchievementTaskArray($this->get('tasks'));
 
         return new AchievementTaskArray([]);
+    }
+
+    public function getUserAchievement()
+    {
+        if($this->hasNotEmpty('user_achievement'))
+            return new UserAchievementCollection($this->get('user_achievement'));
+
+        return new UserAchievementCollection();
     }
 }

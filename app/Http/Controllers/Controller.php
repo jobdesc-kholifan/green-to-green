@@ -63,6 +63,11 @@ class Controller extends BaseController
                 exit;
         }
 
+        if(env('APP_DEBUG')) {
+            echo $e->getMessage();
+            exit;
+        }
+
         if($trace)
             print_r($e->getTraceAsString());
 
@@ -73,9 +78,9 @@ class Controller extends BaseController
      * @param \Exception $e
      * @param string|null $classname
      * @param string|null $function
-     * @return JsonResponse
+     * @return JsonResponse|mixed
      * */
-    public function jsonError(\Exception $e, string $classname = null, string $function = null): JsonResponse
+    public function jsonError(\Exception $e, string $classname = null, string $function = null)
     {
 
         if(Request::ajax()) {
