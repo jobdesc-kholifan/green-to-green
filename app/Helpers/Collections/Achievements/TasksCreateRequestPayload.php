@@ -86,14 +86,35 @@ class TasksCreateRequestPayload extends TaskPayloadCollection implements TaskPay
 
     public function points($payload)
     {
-        $compare = new TasksCreateRequestPayload($payload);
-        $complete = $this->getCount() == $compare->getCount();
+        $payloads = json_decode($payload);
 
-        return $complete ? 100 : 0;
+        $points = 0;
+        $count = 0;
+        if(!is_null($payloads)) {
+            foreach($payloads as $d) {
+                $compare = new TasksCreateRequestPayload(json_encode($d));
+                $complete = $this->getCount() == $compare->getCount();
+
+                $points += $complete ? 100 : 0;
+                $count++;
+            }
+        }
+
+        return $count > 0 ? $points/$count : 0;
     }
 
     public function messages($payload)
     {
-        return '';
+        $payloads = json_decode($payload);
+
+        $diff = $this->getCount();
+        if(!is_null($payloads)) {
+            foreach($payloads as $d) {
+                $compare = new TasksCollectPlasticPayload(json_encode($d));
+                $diff -= $compare->getCount();
+            }
+        }
+
+        return $diff > 0 && $diff != $this->getCount() ? '<div class="text-xs text-danger ml-4" style="line-height: 1.3">Buat '.$diff.' request pickup lagi untuk menyelesaikan achievement</div>' : '';
     }
 }

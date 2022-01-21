@@ -11,6 +11,7 @@ use App\Models\Masters\User;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -192,6 +193,8 @@ class AuthController extends Controller
     {
         try {
 
+            DB::beginTransaction();
+
             $config = findConfig()->in([\DBTypes::statusActive, \DBTypes::roleCustomer]);
             $insertUser = collect($req->only($this->user->getFillable()))
                 ->merge([
@@ -208,17 +211,20 @@ class AuthController extends Controller
             $registerPayload = new TasksRegisterPayload();
             $registerPayload->setCount(1);
 
-            $activity = new CreateActivity(UserCollection::current());
+            $activity = new CreateActivity(new UserCollection($user));
             $activity->setTaskType($configs->get(\DBTypes::tasksRegister));
             $activity->setTaskPayload($registerPayload->createPayload());
             $activity->run();
 
             $activity->updatePoints();
 
+            DB::commit();
+
             return $this->jsonData([
                 'redirect' => url('/')
             ]);
         } catch (\Exception $e) {
+            DB::rollBack();
             return $this->jsonError($e);
         }
     }
@@ -235,6 +241,9 @@ class AuthController extends Controller
     public function processSignUp(Request $req)
     {
         try {
+
+            DB::beginTransaction();
+
             $config = findConfig()->in([\DBTypes::statusActive, \DBTypes::roleCustomer]);
             $insertUser = collect($req->only($this->user->getFillable()))
                 ->merge([
@@ -258,10 +267,13 @@ class AuthController extends Controller
 
             $activity->updatePoints();
 
+            DB::commit();
+
             return $this->jsonData([
                 'redirect' => url('/'),
             ]);
         } catch (\Exception $e) {
+            DB::rollBack();
             return $this->jsonError($e);
         }
     }

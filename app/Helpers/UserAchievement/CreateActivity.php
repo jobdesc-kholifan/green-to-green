@@ -87,7 +87,7 @@ class CreateActivity
     {
         return $this->mUserAchievement->defaultWith($this->mUserAchievement->defaultSelects)
             ->where('user_id', $this->user->getId())
-            ->where('percentage', 100)
+            ->where('percentage', '>=', 100)
             ->get();
     }
 
@@ -160,12 +160,19 @@ class CreateActivity
         if($taskPayload) {
             $countPoints = 0;
             foreach($this->taskPayload as $payload) {
-                $points = $taskPayload->points($payload);
+                $updatePayload = json_decode($this->currentTask->payload());
+                if(is_null($updatePayload))
+                    $updatePayload = [];
+
+                $updatePayload[] = json_decode($payload);
+
+                $points = $taskPayload->points(json_encode($updatePayload));
+
                 if($this->currentTask->getPoints() < 100) {
                     $mUserAchievementTask = $this->mUserAchievementTask->find($this->currentTask->getId());
                     $mUserAchievementTask->update([
-                        'points' => $this->currentTask->getPoints() + $points,
-                        'payload' => $payload,
+                        'points' => $points,
+                        'payload' => json_encode($updatePayload),
                     ]);
 
                     $countPoints += $points;

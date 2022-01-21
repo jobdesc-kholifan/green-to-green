@@ -118,28 +118,45 @@ class TasksCollectPlasticPayload extends TaskPayloadCollection implements TaskPa
 
     public function points($payload)
     {
-        $compare = new TasksCollectPlasticPayload($payload);
+        $payloads = json_decode($payload);
 
         $points = 0;
-        if($this->getCategory() != null) {
-            if($this->getCategoryId() == $compare->getCategoryId())
-                $points = $compare->getCount()/$this->getCount() * 100;
+        $count = 0;
+        if(!is_null($payloads)) {
+            foreach($payloads as $d) {
+                $compare = new TasksCollectPlasticPayload(json_encode($d));
+
+                if($this->getCategory() != null) {
+                    if($this->getCategoryId() == $compare->getCategoryId())
+                        $points += $compare->getCount();
+                }
+
+                else $points += $compare->getCount();
+
+                $count++;
+            }
         }
 
-        else $points = $compare->getCount()/$this->getCount() * 100;
-
-        return $points;
+        return $count > 0 ? $points/$this->getCount() * 100 : 0;
     }
 
     public function messages($payload)
     {
-        $compare = new TasksCollectPlasticPayload($payload);
+        $payloads = json_decode($payload);
 
         $diff = $this->getCount();
-        if($this->getCategory() != null) {
-            if($this->getCategoryId() == $compare->getCategoryId())
-                $diff = $this->getCount() - $compare->getCount();
-        } else $diff = $this->getCount() - $compare->getCount();
+        if(!is_null($payloads)) {
+            foreach($payloads as $d) {
+                $compare = new TasksCollectPlasticPayload(json_encode($d));
+
+                if($this->getCategory() != null) {
+                    if($this->getCategoryId() == $compare->getCategoryId())
+                        $diff -= $compare->getCount();
+                } else {
+                    $diff -= $compare->getCount();
+                }
+            }
+        }
 
         return $diff > 0 && $diff != $this->getCount() ? '<div class="text-xs text-danger ml-4" style="line-height: 1.3">Kumpulkan '.$diff.' kg lagi untuk menyelesaikan achievement</div>' : '';
     }

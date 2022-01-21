@@ -16,4 +16,9 @@ class UserAchievementTaskCollection extends Collection
     {
         return $this->get('points');
     }
+
+    public function payload()
+    {
+        return $this->get('payload');
+    }
 }

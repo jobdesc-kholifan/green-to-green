@@ -28,9 +28,9 @@
                             <div class="card-text mb-3">
                                 <ol class="list-inline">
                                     @foreach($achievement->getTasks()->all() as $task)
-                                        <li class="{{ $task->payload()->points($task->user_payload()) == 100 ? 'text-success' : '' }}">
+                                        <li class="{{ $task->payload()->points($task->user_payload()) >= 100 ? 'text-success' : '' }}">
                                             <div class="d-flex justify-content-start align-items-start">
-                                                <i class="fa {{ $task->payload()->points($task->user_payload()) == 100 ? 'fa-check-circle' : 'fa-circle' }} mr-2 mt-1"></i>
+                                                <i class="fa {{ $task->payload()->points($task->user_payload()) >= 100 ? 'fa-check-circle' : 'fa-circle' }} mr-2 mt-1"></i>
                                                 <span>{{ $task->payload()->getDesc(true) }}</span>
                                             </div>
                                             {!! $task->payload()->messages($task->user_payload()) !!}

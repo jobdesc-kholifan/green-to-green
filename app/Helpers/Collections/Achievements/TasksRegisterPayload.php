@@ -60,8 +60,21 @@ class TasksRegisterPayload extends TaskPayloadCollection implements TaskPayloadC
 
     public function points($payload)
     {
-        $compare = new TasksCollectPlasticPayload($payload);
-        return $this->getCount() == $compare->getCount() ? 100 : 0;
+        $payloads = json_decode($payload);
+
+        $points = 0;
+        $count = 0;
+        if(!is_null($payloads)) {
+            foreach($payloads as $d) {
+                $compare = new TasksRegisterPayload(json_encode($d));
+                $complete = $this->getCount() == $compare->getCount();
+
+                $points += $complete ? 100 : 0;
+                $count++;
+            }
+        }
+
+        return $count > 0 ? $points/$count : 0;
     }
 
     public function messages($payload)
