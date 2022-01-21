@@ -81,6 +81,11 @@ class Order extends Model
         return $this->hasOne(Config::class, 'id', 'status_id');
     }
 
+    public function schedule()
+    {
+        return $this->hasOne(OrderSchedule::class, 'id', 'schedule_id');
+    }
+
     public function defaultQuery()
     {
         return $this->defaultWith($this->defaultSelects)
@@ -91,7 +96,17 @@ class Order extends Model
                 'status' => function($query) {
                     Config::foreignWith($query);
                 },
+                'schedule' => function($query) {
+                    OrderSchedule::foreignWith($query)
+                        ->with([
+                            'staff' => function($query) {
+                                /* @var Relation $query */
+                                $query->select('id', 'full_name', 'phone_number');
+                            }
+                        ])
+                        ->addSelect('staff_id');
+                }
             ])
-            ->addSelect('user_id', 'tr_order.status_id');
+            ->addSelect('user_id', 'tr_order.status_id', 'schedule_id');
     }
 }

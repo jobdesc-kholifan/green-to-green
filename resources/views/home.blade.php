@@ -45,22 +45,22 @@
                 </div>
             </div>
         </div>
-        <div class="container mb-3">
+        <div class="container pb-4">
             <div class="row">
                 <div class="col-3">
                     <h5 class="mb-2">Filter</h5>
                     <div class="font-weight-normal mb-1">Status</div>
                     @foreach($statues->all() as $status)
                         <div class="custom-control custom-checkbox">
-                            <input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="customCheckbox5">
-                            <label for="customCheckbox5" class="custom-control-label font-weight-light">{{ $status->getName() }}</label>
+                            <input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="{{ $status->getSlug() }}">
+                            <label for="{{ $status->getSlug() }}" class="custom-control-label font-weight-light">{{ $status->getName() }}</label>
                         </div>
                     @endforeach
                     <div class="font-weight-normal mt-3 mb-1">Kategori Sampah</div>
                     @foreach($categoryRubbish->all() as $category)
                         <div class="custom-control custom-checkbox">
-                            <input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="customCheckbox5">
-                            <label for="customCheckbox5" class="custom-control-label font-weight-light">{{ $category->getName() }}</label>
+                            <input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="{{ $category->getSlug() }}">
+                            <label for="{{ $category->getSlug() }}" class="custom-control-label font-weight-light">{{ $category->getName() }}</label>
                         </div>
                     @endforeach
                     <div class="mt-3">
@@ -76,10 +76,9 @@
                         <table class="table table-striped table-hover" id="table-data">
                             <thead>
                             <tr>
-                                <th data-data="user.full_name">Nama</th>
                                 <th data-data="created_at">Tanggal</th>
-                                <th data-data="address">Alamat</th>
-                                <th data-data="driver_note">Catatan</th>
+                                <th data-data="address" style="width: 400px">Alamat</th>
+                                <th data-data="status.config_name">Status</th>
                                 <th data-data="action" data-searchable="false" data-orderable="false" style="width: 100px">Aksi</th>
                             </tr>
                             </thead>
@@ -100,6 +99,12 @@
             _token: "{{ csrf_token() }}",
         };
         actions.routes.datatable = "{{ url()->current() }}/datatables-order";
+        actions.detail = function(id) {
+            $.createModal({
+                url: '{{ url()->current() }}/detail',
+                data: {id: id},
+            }).open();
+        };
         actions.build();
     </script>
 @endpush

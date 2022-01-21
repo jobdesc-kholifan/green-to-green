@@ -2,7 +2,7 @@
 
 namespace App\Helpers\Collections\Achievements;
 
-class TasksCreateRequestPayload extends TaskPayloadCollection
+class TasksCreateRequestPayload extends TaskPayloadCollection implements TaskPayloadContract
 {
 
     protected $requirement = [

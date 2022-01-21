@@ -56,6 +56,7 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     Route::get('/', [AppController::class, 'index']);
+    Route::get('/detail', [AppController::class, 'detail']);
     Route::post('/datatables-order', [AppController::class, 'datatablesOrder']);
 
     Route::group(['prefix' => 'profile'], function() {
@@ -94,6 +95,7 @@ Route::group(['middleware' => 'auth'], function() {
 
         Route::group(['prefix' => 'users'], function() {
             Route::post('datatables', [UserController::class, 'datatables']);
+            Route::get('select', [UserController::class, 'selectApi'])->name(DBRoutes::userSelect);
             Route::get('form', [UserController::class, 'form']);
             Route::get('detail', [UserController::class, 'detail']);
             Route::get('check', [UserController::class, 'check'])->name(DBRoutes::userCheck);
@@ -108,6 +110,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::group(['prefix' => 'order'], function() {
             Route::post('datatables', [OrderController::class, 'datatables']);
             Route::get('schedule', [OrderController::class, 'schedule']);
+            Route::post('schedule', [OrderController::class, 'processSchedule']);
+            Route::post('done', [OrderController::class, 'processDone']);
             Route::get('detail', [OrderController::class, 'detail']);
 
             Route::get('', [OrderController::class, 'index'])->name(DBRoutes::order);

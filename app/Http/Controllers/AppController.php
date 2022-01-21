@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Collections\Orders\OrderCollection;
 use App\Models\Masters\User;
 use App\Models\Orders\Order;
 use App\View\Components\Button;
+use Illuminate\Http\Request;
 
 class AppController extends Controller
 {
@@ -12,6 +14,11 @@ class AppController extends Controller
     protected $title = "Welcome to Green to Green";
 
     protected $order;
+
+    public function __construct()
+    {
+        $this->order = new Order();
+    }
 
     public function index()
     {
@@ -30,15 +37,8 @@ class AppController extends Controller
     public function datatablesOrder()
     {
         try {
-            $this->order = new Order();
-
-            $query = $this->order->defaultWith($this->order->defaultSelects)
-                ->with([
-                    'user' => function($query) {
-                        User::foreignWith($query);
-                    }
-                ])
-                ->addSelect('created_at', 'user_id')
+            $query = $this->order->defaultQuery()
+                ->addSelect('created_at')
                 ->where('user_id', auth()->id());
 
             return datatables()->eloquent($query)
@@ -48,9 +48,6 @@ class AppController extends Controller
                 ->editColumn('address', function($data) {
                     return sprintf("%s ...", substr($data->address,0, 50));
                 })
-                ->editColumn('driver_note', function($data) {
-                    return !is_null($data->driver_note) ? sprintf("%s ...", substr($data->driver_note, 0, 50)) : '';
-                })
                 ->addColumn('action', function($data) {
                     $btnDetail = (new Button("actions.detail($data->id)", Button::btnOlive, Button::btnIconInfo))
                         ->setLabel("Lihat Detail")
@@ -59,6 +56,26 @@ class AppController extends Controller
                     return \DBText::renderAction([$btnDetail]);
                 })
                 ->toJson();
+        } catch (\Exception $e) {
+            return $this->jsonError($e);
+        }
+    }
+
+    public function detail(Request $req)
+    {
+        try {
+            $this->title = "Order";
+
+            $query = $this->order->defaultQuery()
+                ->find($req->get('id'));
+
+            $order = new OrderCollection($query);
+
+            return response()->json([
+                'content' => $this->viewResponse('orders.order-detail', [
+                    'order' => $order,
+                ]),
+            ]);
         } catch (\Exception $e) {
             return $this->jsonError($e);
         }

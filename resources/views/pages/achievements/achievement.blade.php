@@ -45,10 +45,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a href="{{ route(DBRoutes::pagePickUp) }}" class="btn btn-block btn-success btn-sm">
-                                <span>Buat Request Pick Up</span>
-                            </a>
-                            <button class="btn btn-block btn-primary btn-sm">
+                            <button class="btn btn-block bg-olive btn-sm">
                                 <i class="fa fa-share-alt mr-2"></i>
                                 <span>Share</span>
                             </button>

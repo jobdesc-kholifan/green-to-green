@@ -56,16 +56,61 @@
         actions.detail = (id) => {
             $.createModal({
                 url: '{{ url()->current() }}/detail',
+                data: {id: id}
             }).open();
         };
         actions.schedule = (id) => {
-            $.createModal({
+            const modal = $.createModal({
                 url: '{{ url()->current() }}/schedule',
                 onLoadComplete: (res, modal) => {
                     FormComponents.daterangepicker.init();
                     FormComponents.select2.init();
+
+                    modal.form().submit({
+                        data: {id: id},
+                        successCallback: (res) => {
+                            AlertNotif.toastr.response(res);
+
+                            if(res.result) {
+                                modal.close();
+                                actions.datatable.reload();
+                            }
+                        },
+                        errorCallback: () => {
+                            AlertNotif.adminlte.error(DBMessage.ERROR_NETWORK_MESSAGE, {
+                                title: DBMessage.ERROR_NETWORK_TITLE,
+                            });
+                        }
+                    })
                 }
-            }).open();
+            });
+            modal.open();
+        };
+        actions.done = (id) => {
+            $.confirmModal({
+                onChange: (value, modal) => {
+                    if(value) {
+                        modal.disabled(true);
+                        ServiceAjax.post('{{ url()->current() }}/done', {
+                            data: {id: id},
+                            success: (res) => {
+                                modal.disabled(false);
+                                AlertNotif.toastr.response(res);
+                                if(res.result) {
+                                    modal.close();
+                                    actions.datatable.reload(false);
+                                }
+                            },
+                            error: () => {
+                                modal.disabled(false);
+                                AlertNotif.adminlte.error(DBMessage.ERROR_NETWORK_MESSAGE, {
+                                    titke: DBMessage.ERROR_NETWORK_TITLE,
+                                })
+                            }
+                        });
+                    } else modal.close();
+                },
+            }).show();
         };
         actions.build();
     </script>

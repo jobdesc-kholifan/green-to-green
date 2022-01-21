@@ -1,4 +1,4 @@
-<form>
+<form method="post" action="{{ url()->current() }}">
     {{ csrf_field() }}
     <div class="modal-header">
         <h3 class="card-title">Form {{ $title }}</h3>
@@ -11,7 +11,7 @@
                 type="text"
                 id="input-dob"
                 class="form-control"
-                name="date_of_birth"
+                name="schedule_date"
                 placeholder="{{ DBText::datePlaceholder() }}"
                 data-toggle="daterangepicker"
                 data-format="DD/MM/YYYY"
@@ -26,33 +26,11 @@
             <select
                 id="select-role"
                 class="form-control"
-                name="role_id"
+                name="staff_id"
                 data-toggle="select2"
-                data-url="{{ route(DBRoutes::configSelect) }}"
-                data-params='{"parent_slug": ["{{ DBTypes::role }}"]}'
+                data-url="{{ route(DBRoutes::userSelect) }}"
+                data-params='{"role_slug": ["{{ DBTypes::roleStaff }}"]}'
             ></select>
-        </div>
-        <div class="form-group">
-            <label for="select-role" class="required">Mobil</label>
-            <select
-                id="select-role"
-                class="form-control"
-                name="role_id"
-                data-toggle="select2"
-                data-url="{{ route(DBRoutes::configSelect) }}"
-                data-params='{"parent_slug": ["{{ DBTypes::role }}"]}'
-            ></select>
-        </div>
-        <div class="form-group">
-            <label for="input-phone-number" class="required">No. Mobil</label>
-            <input
-                type="text"
-                id="input-phone-number"
-                class="form-control"
-                name="phone_number"
-                placeholder="{{ DBText::inputPlaceholder('No Handphone') }}"
-                maxlength="20"
-            />
         </div>
         <div class="form-group">
             <label for="input-description">Deskripsi</label>

@@ -46,6 +46,7 @@ class CreateActivity
         $this->user = $user;
 
         $this->mAchievement = new Achievement();
+        $this->mAchievementTask = new AchievementTask();
         $this->mUserAchievement = new UserAchievement();
         $this->mUserAchievementTask = new UserAchievementTask();
     }
@@ -175,6 +176,9 @@ class CreateActivity
 
     public function updatePoints()
     {
+        $masterTask = $this->mAchievementTask->where('achievement_id', $this->current->getAchievementId())
+            ->get();
+
         $tasks = $this->mUserAchievementTask->defaultWith($this->mUserAchievementTask->defaultSelects)
             ->where('user_achievement_id', $this->current->getId())
             ->get();
@@ -187,7 +191,7 @@ class CreateActivity
         $userAchievement = $this->mUserAchievement->find($this->current->getId());
         $userAchievement->update([
             'points' => $allPoints,
-            'percentage' => $allPoints/$tasks->count(),
+            'percentage' => $allPoints/$masterTask->count(),
         ]);
     }
 }

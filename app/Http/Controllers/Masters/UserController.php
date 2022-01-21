@@ -30,6 +30,34 @@ class UserController extends Controller
         $this->user = new User();
     }
 
+    public function selectApi(Request $req)
+    {
+        try {
+            $searchValue = trim(strtolower($req->get('term')));
+            $query = $this->user->defaultWith($this->user->defaultSelects)
+                ->where(function($query) use ($searchValue) {
+                    /* @var Relation $query */
+                    $query->where(DB::raw('TRIM(LOWER(full_name))'), 'like', "%$searchValue%");
+                });
+
+            if($req->has('role_slug')) {
+                $roleSlug = $req->get('role_slug');
+                $query->whereHas('role', function($query) use ($roleSlug) {
+                    /* @var Relation $query */
+                    $query->where('slug', $roleSlug);
+                });
+            }
+
+            $json = [];
+            foreach($query->get() as $d)
+                $json[] = ['id' => $d->id, 'text' => $d->full_name];
+
+            return response()->json($json);
+        } catch (\Exception $e) {
+            return $this->jsonError($e);
+        }
+    }
+
     public function index()
     {
         try {

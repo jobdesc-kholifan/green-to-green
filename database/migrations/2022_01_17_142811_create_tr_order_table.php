@@ -19,6 +19,7 @@ class CreateTrOrderTable extends Migration
             $table->string('lat_lng',50);
             $table->string('address')->nullable();
             $table->text('driver_note')->nullable();
+            $table->bigInteger('schedule_id')->nullable();
             $table->bigInteger('status_id')->unsigned();
 
             $table->timestamps();

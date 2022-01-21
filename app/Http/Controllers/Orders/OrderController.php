@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Orders;
 
+use App\Helpers\Collections\Orders\OrderCollection;
 use App\Http\Controllers\Controller;
 use App\Models\Orders\Order;
+use App\Models\Orders\OrderSchedule;
 use App\View\Components\Button;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -22,9 +26,15 @@ class OrderController extends Controller
      * */
     protected $order;
 
+    /**
+     * @var OrderSchedule|Relation
+     * */
+    protected $orderSchedule;
+
     public function __construct()
     {
         $this->order = new Order();
+        $this->orderSchedule = new OrderSchedule();
     }
 
     public function index()
@@ -62,6 +72,11 @@ class OrderController extends Controller
                         $btnSchedule = (new Button("actions.schedule($data->id)", Button::btnPrimarySolid, Button::btnCalendar))
                             ->render();
 
+                    else if($data->status->slug == \DBTypes::statusOrderInPickup)
+                        $btnSchedule = (new Button("actions.done($data->id)", Button::btnPrimarySolid, Button::btnCheckCirlcle))
+                            ->setLabel('Selesaikan')
+                            ->render();
+
                     return \DBText::renderAction([$btnSchedule, $btnDetail]);
                 })
                 ->toJson();
@@ -70,13 +85,20 @@ class OrderController extends Controller
         }
     }
 
-    public function detail()
+    public function detail(Request $req)
     {
         try {
             $this->title = "Order";
 
+            $query = $this->order->defaultQuery()
+                ->find($req->get('id'));
+
+            $order = new OrderCollection($query);
+
             return response()->json([
-                'content' => $this->viewResponse('order-detail'),
+                'content' => $this->viewResponse('order-detail', [
+                    'order' => $order,
+                ]),
             ]);
         } catch (\Exception $e) {
             return $this->jsonError($e);
@@ -91,6 +113,61 @@ class OrderController extends Controller
             return response()->json([
                 'content' => $this->viewResponse('order-schedule'),
             ]);
+        } catch (\Exception $e) {
+            return $this->jsonError($e);
+        }
+    }
+
+    public function processSchedule(Request $req)
+    {
+        try {
+
+            DB::beginTransaction();
+
+            $row = $this->order->find($req->get('id'));
+
+            $configs = findConfig()->in([\DBTypes::statusOrderInPickup]);
+
+            if(is_null($row))
+                throw new \Exception(\DBMessages::corruptData, \DBCodes::authorizedError);
+
+            $insertSchedule = collect($req->only($this->orderSchedule->getFillable()))
+                ->merge([
+                    'order_id' => $row->id,
+                    'schedule_date' => dbDate($req->get('schedule_date')),
+                ]);
+            $schedule = $this->orderSchedule->create($insertSchedule->toArray());
+
+            $row->update([
+                'schedule_id' => $schedule->id,
+                'status_id' => $configs->get(\DBTypes::statusOrderInPickup)->getId(),
+            ]);
+
+            DB::commit();
+
+            return $this->jsonSuccess(\DBMessages::successUpdate);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->jsonError($e);
+        }
+    }
+
+    public function processDone(Request $req)
+    {
+        try {
+
+            $row = $this->order->find($req->get('id'));
+
+            $configs = findConfig()->in([\DBTypes::statusOrderDone]);
+
+            if(is_null($row))
+                throw new \Exception(\DBMessages::corruptData, \DBCodes::authorizedError);
+
+            $row->update([
+                'status_id' => $configs->get(\DBTypes::statusOrderDone)->getId(),
+            ]);
+
+            return $this->jsonSuccess(\DBMessages::successUpdate);
         } catch (\Exception $e) {
             return $this->jsonError($e);
         }

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\Collections\Achievements\TasksRegisterPayload;
 use App\Helpers\Collections\Users\UserCollection;
+use App\Helpers\UserAchievement\CreateActivity;
 use App\Http\Controllers\Controller;
 use App\Models\Masters\Config;
 use App\Models\Masters\User;
@@ -162,15 +164,21 @@ class AuthController extends Controller
                     'role_id' => $config->get(\DBTypes::roleCustomer)->getId(),
                     'status_id' => $config->get(\DBTypes::statusActive)->getId(),
                 ]);
-            $user = UserCollection::create($insertUser->toArray());
+            $user = $this->user->create($insertUser->toArray());
 
-            $credentials = [
-                'user_name' => $user->getUserName(),
-                'password' => $password,
-            ];
+            Auth::login($user);
 
-            if(!Auth::attempt($credentials))
-                throw new \Exception(\DBMessages::loginFailed, \DBCodes::authorizedError);
+            $configs = findConfig()->in([\DBTypes::tasksRegister]);
+
+            $registerPayload = new TasksRegisterPayload();
+            $registerPayload->setCount(1);
+
+            $activity = new CreateActivity(UserCollection::current());
+            $activity->setTaskType($configs->get(\DBTypes::tasksRegister));
+            $activity->setTaskPayload($registerPayload->createPayload());
+            $activity->run();
+
+            $activity->updatePoints();
 
             return $this->jsonData([
                 'redirect' => url('/')
@@ -194,6 +202,18 @@ class AuthController extends Controller
             $user = $this->user->create($insertUser->toArray());
 
             Auth::login($user);
+
+            $configs = findConfig()->in([\DBTypes::tasksRegister]);
+
+            $registerPayload = new TasksRegisterPayload();
+            $registerPayload->setCount(1);
+
+            $activity = new CreateActivity(UserCollection::current());
+            $activity->setTaskType($configs->get(\DBTypes::tasksRegister));
+            $activity->setTaskPayload($registerPayload->createPayload());
+            $activity->run();
+
+            $activity->updatePoints();
 
             return $this->jsonData([
                 'redirect' => url('/')
@@ -225,6 +245,18 @@ class AuthController extends Controller
             $user = $this->user->create($insertUser->toArray());
 
             Auth::login($user);
+
+            $configs = findConfig()->in([\DBTypes::tasksRegister]);
+
+            $registerPayload = new TasksRegisterPayload();
+            $registerPayload->setCount(1);
+
+            $activity = new CreateActivity(UserCollection::current());
+            $activity->setTaskType($configs->get(\DBTypes::tasksRegister));
+            $activity->setTaskPayload($registerPayload->createPayload());
+            $activity->run();
+
+            $activity->updatePoints();
 
             return $this->jsonData([
                 'redirect' => url('/'),

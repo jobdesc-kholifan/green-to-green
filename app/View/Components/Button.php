@@ -19,6 +19,7 @@ class Button
     const btnIconInfo = '<i class="fa fa-info-circle"></i>';
     const btnIconPrint = '<i class="fa fa-print"></i>';
     const btnCalendar = '<i class="fa fa-calendar"></i>';
+    const btnCheckCirlcle = '<i class="fa fa-check-circle"></i>';
     const btnIconFile = '<i class="fa fa-file-alt"></i>';
     const btnIconApproved = '<i class="fa fa-check"></i>';
     const btnIconFileDownload = '<i class="fa fa-file-download"></i>';

@@ -19,6 +19,7 @@ class DBRoutes
 
     const user = 'user';
     const userCheck = 'user.check';
+    const userSelect = 'user.select';
 
     const pageAchievement = 'page.achievement';
 
