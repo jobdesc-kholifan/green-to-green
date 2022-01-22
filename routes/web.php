@@ -62,6 +62,11 @@ Route::group(['middleware' => 'auth'], function() {
     Route::group(['prefix' => 'profile'], function() {
 
         Route::get('', [ProfileController::class, 'index'])->name(DBRoutes::profile);
+        Route::get('change', [ProfileController::class, 'changeProfile'])->name(DBRoutes::profileChange);
+        Route::post('change', [ProfileController::class, 'processChangeProfile']);
+        Route::get('change-password', [ProfileController::class, 'changePassword'])->name(DBRoutes::profileChangePassword);
+        Route::post('change-password', [ProfileController::class, 'processChangePassword']);
+        Route::get('check', [UserController::class, 'check'])->name(DBRoutes::profileCheck);
     });
 
     Route::group(['prefix' => 'achievement'], function() {

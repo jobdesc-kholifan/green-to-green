@@ -20,6 +20,7 @@ class Order extends Model
         'address',
         'driver_note',
         'status_id',
+        'schedule_id',
     ];
 
     public $defaultSelects = [

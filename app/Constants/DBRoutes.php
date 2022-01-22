@@ -28,4 +28,7 @@ class DBRoutes
     const order = 'order';
 
     const profile = 'profile';
+    const profileChange = 'profile.change';
+    const profileChangePassword = 'profile.change-password';
+    const profileCheck = 'profile.check';
 }

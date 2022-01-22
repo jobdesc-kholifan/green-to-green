@@ -23,7 +23,8 @@ class User extends Authenticatable
         'user_name',
         'user_password',
         'role_id',
-        'status_id'
+        'status_id',
+        'address'
     ];
 
     public $defaultSelects = [

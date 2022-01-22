@@ -18,7 +18,6 @@
                         <div class="card-body box-profile">
                             <div class="text-center"></div>
                             <h3 class="profile-username text-center">{{ $user->getFullName() }}</h3>
-                            <p class="text-muted text-center">{{ $user->getRole()->getName() }}</p>
                             <ul class="list-group list-group-unbordered mb-3">
                                 <li class="list-group-item">
                                     <b>Followers</b> <a class="float-right text-olive">1,322</a>
@@ -63,10 +62,10 @@
                                     <hr class="m-0">
                                     <div class="px-3 py-2">
                                         <div class="mb-0">
-                                            <a href="#" class="text-sm">Ubah password</a>
+                                            <a href="javascript:actions.changePassword()" class="text-sm">Ubah password</a>
                                         </div>
                                         <div class="mb-1">
-                                            <a href="#" class="text-sm">Ubah informasi akun</a>
+                                            <a href="javascript:actions.editProfile()" class="text-sm">Ubah informasi akun</a>
                                         </div>
                                     </div>
                                 </div>
@@ -78,3 +77,87 @@
         </div>
     </div>
 @endsection
+
+@push('script-footer')
+    <script src="{{ asset('dist/js/actions.js') }}"></script>
+    <script type="text/javascript">
+        const actions = new Actions("");
+        actions.editProfile = function() {
+            $.createModal({
+                url: "{{ route(DBRoutes::profileChange) }}",
+                onLoadComplete: (res, modal) => {
+                    FormComponents.validation.init();
+                    modal.form().submit({
+                        beforeSubmit: (form) => {
+                            form.setDisabled(false);
+
+                            return FormComponents.validation.isValid();
+                        },
+                        successCallback: (res, form) => {
+                            form.setDisabled(false);
+                            AlertNotif.toastr.response(res);
+
+                            if(res.result) {
+                                modal.close();
+                                setTimeout(() => window.location.reload(), 500);
+                            }
+                        },
+                        errorCallback: (xhr, form) => {
+                            form.setDisabled(false);
+                            AlertNotif.adminlte.error(DBMessage.ERROR_NETWORK_MESSAGE, {
+                                title: DBMessage.ERROR_NETWORK_TITLE
+                            });
+                        }
+                    })
+                }
+            }).open();
+        };
+        actions.changePassword = function() {
+            $.createModal({
+                url: "{{ route(DBRoutes::profileChangePassword) }}",
+                onLoadComplete: (res, modal) => {
+                    const $validationPassword = $(modal.find('#validation-password'));
+                    const $newPassword = $(modal.find('#input-new-password'));
+                    const $confirmPassword = $($validationPassword.find('#input-confirm-password'));
+
+                    $confirmPassword.donetyping(() => {
+                        const $icon = $validationPassword.find('[data-action=icon]');
+                        const $messages = $validationPassword.find('[data-action=message]');
+                        $messages.empty();
+
+                        if($newPassword.val().trim() !== $confirmPassword.val().trim()) {
+                            $icon.html($('<i>', {class: 'fa fa-times text-danger'}));
+                            $messages.html("Konfirmasi kata sandi tidak sama");
+                        }
+
+                        else $icon.html($('<i>', {class:' fa fa-check-circle text-success'}));
+
+                    });
+
+                    modal.form().submit({
+                        beforeSubmit: (form) => {
+                            form.setDisabled(true);
+
+                            return $newPassword.val().trim() === $confirmPassword.val().trim();
+                        },
+                        successCallback: (res, form) => {
+                            form.setDisabled(false);
+                            AlertNotif.toastr.response(res);
+
+                            if(res.result)
+                                modal.close();
+                        },
+                        errorCallback: (xhr, form) => {
+                            form.setDisabled(false);
+
+                            AlertNotif.adminlte.error(DBMessage.ERROR_NETWORK_MESSAGE, {
+                                title: DBMessage.ERROR_NETWORK_TITLE
+                            });
+                        },
+                    });
+                }
+            }).open();
+        };
+        actions.build();
+    </script>
+@endpush

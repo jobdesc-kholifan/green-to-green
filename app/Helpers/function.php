@@ -25,6 +25,13 @@ if(!function_exists('isParentMenuOpen')) {
     }
 }
 
+if(!function_exists('isChecked')) {
+
+    function isChecked($key, $value) {
+        return $key == $value ? 'checked' : '';
+    }
+}
+
 if(!function_exists('currentDate')) {
 
     function currentDate($format = 'Y-m-d H:i:s') {

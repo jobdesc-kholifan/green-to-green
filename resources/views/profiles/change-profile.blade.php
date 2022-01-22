@@ -1,4 +1,11 @@
-<form>
+<?php
+
+/**
+ * @var \App\Helpers\Collections\Users\UserCollection $profile
+ * */
+
+?>
+<form action="{{ url()->current() }}" method="post">
     {{ csrf_field() }}
     <div class="modal-header">
         <h3 class="card-title">Form {{ $title }}</h3>
@@ -14,6 +21,7 @@
                 name="full_name"
                 placeholder="{{ DBText::inputPlaceholder('Nama Lengkap') }}"
                 maxlength="100"
+                value="{{ $profile->getFullName() }}"
                 required
             />
         </div>
@@ -28,6 +36,7 @@
                         name="place_of_birth"
                         placeholder="{{ DBText::inputPlaceholder('Tempat Lahir') }}"
                         maxlength="100"
+                        value="{{ $profile->getPlaceOfBirth() }}"
                     />
                 </div>
                 <div class="col-sm-4">
@@ -43,6 +52,7 @@
                         data-single-date="true"
                         data-auto-apply="true"
                         data-show-dropdowns="true"
+                        value="{{ $profile->getDateOfBirth() }}"
                     />
                 </div>
             </div>
@@ -52,7 +62,7 @@
             <div class="d-flex">
                 @foreach($genders as $gender)
                     <div class="form-check ml-1">
-                        <input class="form-check-input" id="{{ $gender->getSlug() }}" type="radio" name="gender_id" value="{{ $gender->getId() }}">
+                        <input class="form-check-input" id="{{ $gender->getSlug() }}" type="radio" name="gender_id" value="{{ $gender->getId() }}" {{ isChecked($profile->getGenderId(), $gender->getId()) }}>
                         <label class="form-check-label" for="{{ $gender->getSlug() }}">{{ $gender->getName() }}</label>
                     </div>
                 @endforeach
@@ -66,7 +76,7 @@
                 name="address"
                 placeholder="{{ DBText::inputPlaceholder('Alamat') }}"
                 rows="5"
-            ></textarea>
+            >{{ $profile->getAddress() }}</textarea>
         </div>
         <div class="form-group">
             <label for="input-email" class="required">Email</label>
@@ -79,9 +89,11 @@
                     placeholder="{{ DBText::inputPlaceholder('Email') }}"
                     maxlength="100"
                     data-toggle="validation"
-                    data-url="{{ route(DBRoutes::userCheck) }}"
+                    data-url="{{ route(DBRoutes::profileCheck) }}"
                     data-label="email"
                     data-field="email"
+                    data-id="{{ $profile->getId() }}"
+                    value="{{ $profile->getEmail() }}"
                 />
                 <div class="input-group-append">
                     <div class="input-group-text bg-transparent" data-action="icon">
@@ -100,18 +112,8 @@
                 name="phone_number"
                 placeholder="{{ DBText::inputPlaceholder('No Handphone') }}"
                 maxlength="20"
+                value="{{ $profile->getPhoneNumber() }}"
             />
-        </div>
-        <div class="form-group">
-            <label for="select-role" class="required">Role</label>
-            <select
-                id="select-role"
-                class="form-control"
-                name="role_id"
-                data-toggle="select2"
-                data-url="{{ route(DBRoutes::configSelect) }}"
-                data-params='{"parent_slug": ["{{ DBTypes::role }}"]}'
-            ></select>
         </div>
         <div class="form-group">
             <label for="input-username" class="required">Nama Pengguna</label>
@@ -124,9 +126,11 @@
                     placeholder="{{ DBText::inputPlaceholder('Nama Pengguna') }}"
                     maxlength="100"
                     data-toggle="validation"
-                    data-url="{{ route(DBRoutes::userCheck) }}"
+                    data-url="{{ route(DBRoutes::profileCheck) }}"
                     data-label="nama pengguna"
                     data-field="user_name"
+                    data-id="{{ $profile->getId() }}"
+                    value="{{ $profile->getUserName() }}"
                     required
                 />
                 <div class="input-group-append">
@@ -136,29 +140,6 @@
                 </div>
             </div>
             <small class="text-danger" data-action="message"></small>
-        </div>
-        <div class="form-group">
-            <label for="input-password" class="required">Kata Sandi</label>
-            <input
-                type="password"
-                id="input-password"
-                class="form-control"
-                name="password"
-                placeholder="{{ DBText::inputPlaceholder('Kata Sandi') }}"
-                maxlength="100"
-                required
-            />
-        </div>
-        <div class="form-group">
-            <label for="select-status" class="required">Status</label>
-            <select
-                id="select-status"
-                class="form-control"
-                name="status_id"
-                data-toggle="select2"
-                data-url="{{ route(DBRoutes::configSelect) }}"
-                data-params='{"parent_slug": ["{{ DBTypes::status }}"]}'
-            ></select>
         </div>
     </div>
     <div class="modal-footer">

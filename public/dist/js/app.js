@@ -395,7 +395,7 @@ const FormComponents = {
                 if(options.id !== undefined)
                     id = options.id;
 
-                $item.data(FormComponents.validation.keyData.valid, false);
+                $item.data(FormComponents.validation.keyData.valid, null);
                 $item.donetyping(() => {
                     if($item.val() !== '') {
                         $item.data(FormComponents.validation.keyData.valid, false);
@@ -435,7 +435,7 @@ const FormComponents = {
             const $elements = $(FormComponents.validation.selector);
             for(let i = 0; i < $elements.length; i++) {
                 const $item = $($elements[i]);
-                if(!$item.data(FormComponents.validation.keyData.valid)) {
+                if($item.data(FormComponents.validation.keyData.valid) !== null && !$item.data(FormComponents.validation.keyData.valid)) {
                     isValid = false;
                     break;
                 }
