@@ -22,9 +22,11 @@ class User extends Authenticatable
         'phone_number',
         'user_name',
         'user_password',
+        'bio',
         'role_id',
         'status_id',
-        'address'
+        'address',
+        'profile'
     ];
 
     public $defaultSelects = [
@@ -34,7 +36,9 @@ class User extends Authenticatable
         'email',
         'phone_number',
         'user_name',
-        'address'
+        'address',
+        'bio',
+        'profile',
     ];
 
     public function getDateOfBirthAttribute($value)
@@ -74,7 +78,7 @@ class User extends Authenticatable
             'gender' => function($query) {
                 Config::foreignWith($query);
             }
-        ])->select($this->getKeyName(), 'gender_id')->addSelect($selects);
+        ])->select($this->getKeyName(), 'gender_id', DBImage())->addSelect($selects);
     }
 
     /**
@@ -108,6 +112,26 @@ class User extends Authenticatable
     public function gender()
     {
         return $this->hasOne(Config::class, 'id', 'gender_id');
+    }
+
+    public function following()
+    {
+        return $this->hasOne(UserFollow::class, 'user_follow_id', 'id');
+    }
+
+    public function followings()
+    {
+        return $this->hasMany(UserFollow::class, 'user_follow_id', 'id');
+    }
+
+    public function follower()
+    {
+        return $this->hasOne(UserFollow::class, 'user_id', 'id');
+    }
+
+    public function followers()
+    {
+        return $this->hasMany(UserFollow::class, 'user_id', 'id');
     }
 
     public function defaultQuery()

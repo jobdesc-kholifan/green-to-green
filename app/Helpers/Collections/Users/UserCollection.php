@@ -5,6 +5,7 @@ namespace App\Helpers\Collections\Users;
 use App\Helpers\Collections\Collection;
 use App\Helpers\Collections\Configs\ConfigCollection;
 use App\Models\Masters\User;
+use App\Models\Masters\UserFollow;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 class UserCollection extends Collection
@@ -125,5 +126,32 @@ class UserCollection extends Collection
     public function getPassword()
     {
         return $this->get('user_password');
+    }
+
+    /**
+     * @return UserFollowArray
+     * */
+    public function getFollowers()
+    {
+        if($this->hasNotEmpty('followers'))
+            return new UserFollowArray($this->get('followers'));
+
+        return new UserFollowArray([]);
+    }
+
+    /**
+     * @return UserFollowArray
+     * */
+    public function getFollowing()
+    {
+        if($this->hasNotEmpty('followings'))
+            return new UserFollowArray($this->get('followings'));
+
+        return new UserFollowArray([]);
+    }
+
+    public function getUrlProfile()
+    {
+        return $this->get('preview');
     }
 }

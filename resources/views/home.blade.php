@@ -88,10 +88,20 @@
                 </div>
             </div>
         </div>
+        <div class="container pb-4">
+            <div id="list-results" class="mb-4"></div>
+            <div class="text-center w-100">
+                <a href="{{ route(DBRoutes::searchFriends) }}">
+                    <i class="fa fa-plus-circle mr-1"></i>
+                    <span>Cari Teman lebih banyak teman</span>
+                </a>
+            </div>
+        </div>
     </div>
 @endsection
 
 @push('script-footer')
+    <script src="{{ asset('dist/js/list-friends.js') }}"></script>
     <script src="{{ asset('dist/js/actions.js') }}"></script>
     <script type="text/javascript">
         const actions = new Actions("{{ url()->current() }}");
@@ -106,5 +116,16 @@
             }).open();
         };
         actions.build();
+
+        const list = new ListFriends('#list-results', {
+            token: "{{ csrf_token() }}",
+            routes: {
+                search: "{{ route(DBRoutes::searchFriendsList) }}",
+                follow: "{{ route(DBRoutes::searchFriendsFollow) }}",
+                info: "{{ route(DBRoutes::searchFriendsInfo) }}"
+            },
+            user_id: {{ auth()->id() }}
+        });
+        list.suggest(6);
     </script>
 @endpush

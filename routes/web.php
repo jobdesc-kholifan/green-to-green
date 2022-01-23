@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\PreviewController;
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Masters\AchievementController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\Masters\ConfigController;
 use App\Http\Controllers\Masters\UserController;
 use App\Http\Controllers\Orders\OrderController;
 use App\Http\Controllers\Profiles\ProfileController;
+use App\Http\Controllers\Profiles\SearchFriendsController;
 use App\Http\Controllers\Users\RequestPickUpController;
 use App\Http\Controllers\Users\UserAchievementController;
 use Illuminate\Http\Request;
@@ -48,6 +50,12 @@ Route::get('logout', function(Request $req) {
 })->name(DBRoutes::authLogout);
 
 Route::group(['middleware' => 'auth'], function() {
+    Route::group(['prefix' => 'preview'], function () {
+
+        Route::get('{directory}/{token}/show', [PreviewController::class, 'index']);
+    });
+
+
     Route::group(['prefix' => 'config'], function($query) {
         Route::get('select', [ConfigController::class, 'select'])->name(DBRoutes::configSelect);
 
@@ -67,6 +75,17 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('change-password', [ProfileController::class, 'changePassword'])->name(DBRoutes::profileChangePassword);
         Route::post('change-password', [ProfileController::class, 'processChangePassword']);
         Route::get('check', [UserController::class, 'check'])->name(DBRoutes::profileCheck);
+        Route::get('following', [ProfileController::class, 'following'])->name(DBRoutes::profileFollowing);
+        Route::get('follower', [ProfileController::class, 'follower'])->name(DBRoutes::profileFollower);
+        Route::post('change-profile', [ProfileController::class, 'changeImageProfile'])->name(DBRoutes::profileChangeProfile);
+    });
+
+    Route::group(['prefix' => 'searchFriends'], function() {
+
+        Route::get('', [SearchFriendsController::class, 'index'])->name(DBRoutes::searchFriends);
+        Route::get('list', [SearchFriendsController::class, 'listFriends'])->name(DBRoutes::searchFriendsList);
+        Route::post('follow', [SearchFriendsController::class, 'followFriends'])->name(DBRoutes::searchFriendsFollow);
+        Route::get('info', [UserController::class, 'detail'])->name(DBRoutes::searchFriendsInfo);
     });
 
     Route::group(['prefix' => 'achievement'], function() {

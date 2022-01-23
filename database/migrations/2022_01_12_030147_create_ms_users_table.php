@@ -22,8 +22,10 @@ class CreateMsUsersTable extends Migration
             $table->text('address')->nullable();
             $table->string('email', 100)->nullable();
             $table->string('phone_number', 15)->nullable();
+            $table->text('bio')->nullable();
             $table->string('user_name', 100)->nullable();
             $table->text('user_password')->nullable();
+            $table->text('profile')->nullable();
             $table->bigInteger('role_id')->unsigned();
             $table->bigInteger('status_id')->unsigned();
 

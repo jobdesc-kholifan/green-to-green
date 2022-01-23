@@ -291,3 +291,24 @@ dl.row.font-size-md > dt, dl.row.font-size-md > dd {
     text-align: center;
     top: 40%;
 }
+.line-height-1 {
+    line-height: 1!important;
+}
+.text-overflow-ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.block-ellipsis-2 {
+    display: block;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.img-contain {
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}

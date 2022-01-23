@@ -20,6 +20,7 @@ class DBRoutes
     const user = 'user';
     const userCheck = 'user.check';
     const userSelect = 'user.select';
+    const userInfo = 'user.info';
 
     const pageAchievement = 'page.achievement';
 
@@ -31,4 +32,12 @@ class DBRoutes
     const profileChange = 'profile.change';
     const profileChangePassword = 'profile.change-password';
     const profileCheck = 'profile.check';
+    const profileFollower = 'profile.follower';
+    const profileFollowing = 'profile.following';
+    const profileChangeProfile = 'profile.change-profile';
+
+    const searchFriends = 'search-friends';
+    const searchFriendsList = 'search-friends.list';
+    const searchFriendsFollow = 'search-friends.follow';
+    const searchFriendsInfo = 'search-friends.info';
 }

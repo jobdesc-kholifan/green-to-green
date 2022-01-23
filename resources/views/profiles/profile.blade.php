@@ -16,18 +16,24 @@
                 <div class="col-12 col-sm-3">
                     <div class="card card-olive card-outline">
                         <div class="card-body box-profile">
-                            <div class="text-center"></div>
-                            <h3 class="profile-username text-center">{{ $user->getFullName() }}</h3>
+                            <div class="text-center mb-3">
+                                <div class="profile-user-img img-fluid img-circle img-contain" style="height: 100px;background-image: url('{{ $user->getUrlProfile() }}');"></div>
+                            </div>
+                            <h3 class="profile-username text-center block-ellipsis-2">{{ $user->getFullName() }}</h3>
                             <ul class="list-group list-group-unbordered mb-3">
                                 <li class="list-group-item">
-                                    <b>Followers</b> <a class="float-right text-olive">1,322</a>
+                                    <b>Pengikut</b> <a href="javascript:actions.follower()" class="float-right text-olive">{{ IDR($user->getFollowers()->count(), '') }}</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Following</b> <a class="float-right text-olive">543</a>
+                                    <b>Mengikuti</b> <a href="javascript:actions.following()" class="float-right text-olive">{{ IDR($user->getFollowing()->count(), '') }}</a>
                                 </li>
                             </ul>
 
-                            <a href="#" class="btn bg-olive btn-block"><b>Follow</b></a>
+                            <a href="{{ route(DBRoutes::searchFriends) }}" class="btn bg-olive btn-block mb-2">Cari Teman</a>
+                            <form id="form-update" method="post" action="{{ route(DBRoutes::profileChangeProfile) }}">
+                                {{ csrf_field() }}
+                                <button onclick="actions.changeImageProfile()" type="button" class="btn bg-olive btn-block">Ganti Foto</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -157,6 +163,32 @@
                     });
                 }
             }).open();
+        };
+        actions.following = () => {
+            $.createModal({
+                url: "{{ route(DBRoutes::profileFollowing) }}",
+            }).open();
+        };
+        actions.follower = () => {
+            $.createModal({
+                url: "{{ route(DBRoutes::profileFollower) }}",
+            }).open();
+        };
+        actions.changeImageProfile = () => {
+            const $formUpload = $('#form-update');
+            const $input = $('<input>', {class: 'd-none', name: 'profile',type: 'file', 'accept': 'image/*'});
+            $formUpload.append($input);
+            $input.click();
+            $input.change(() => $formUpload.submit());
+
+            $formUpload.formSubmit({
+                successCallback: (res) => {
+                    AlertNotif.toastr.response(res);
+
+                    if(res.result)
+                        setTimeout(() => window.location.reload(), 500);
+                }
+            })
         };
         actions.build();
     </script>
