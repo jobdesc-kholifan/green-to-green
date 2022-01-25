@@ -19,7 +19,7 @@
                         <table class="table table-striped table-hover" id="table-data">
                             <thead>
                             <tr>
-                                <th data-name="no" data-orderable="false" data-searchable="false" style="width: 50px"></th>
+                                <th data-name="no" data-orderable="false" data-searchable="false" style="width: 50px">No</th>
                                 <th data-data="full_name" data-name="full_name">Nama Lengkap</th>
                                 <th data-data="gender.config_name" data-name="gender.config_name">Jenkel</th>
                                 <th data-data="ttl" data-name="pob">TTL</th>

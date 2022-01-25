@@ -13,7 +13,7 @@
     <div class="content">
         <div class="container mb-3">
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-sm-6 col-lg-4">
                     <div class="card bg-olive card-outline">
                         <div class="card-body">
                             <h5 class="card-title text-bold mb-2">Archievement</h5>
@@ -23,7 +23,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-sm-6 col-lg-4">
                     <div class="card bg-olive card-outline">
                         <div class="card-body">
                             <h5 class="card-title text-bold mb-2">Set Pickup</h5>
@@ -33,7 +33,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-sm-6 col-lg-4">
                     <div class="card bg-olive card-outline">
                         <div class="card-body">
                             <h5 class="card-title text-bold mb-2">Set Up Your Profile</h5>
@@ -47,7 +47,7 @@
         </div>
         <div class="container pb-4">
             <div class="row">
-                <div class="col-3">
+                <div class="col-12 col-md-3">
                     <h5 class="mb-2">Filter</h5>
                     <div class="font-weight-normal mb-1">Status</div>
                     @foreach($statues->all() as $status)
@@ -63,14 +63,14 @@
                             <label for="{{ $category->getSlug() }}" class="custom-control-label font-weight-light">{{ $category->getName() }}</label>
                         </div>
                     @endforeach
-                    <div class="mt-3">
+                    <div class="mt-3 mb-3">
                         <button type="button" class="btn bg-olive btn-block btn-sm">
                             <i class="fa fa-filter mr-2"></i>
                             <span>Filter</span>
                         </button>
                     </div>
                 </div>
-                <div class="col-9">
+                <div class="col-12 col-md-9">
                     <h5 class="mb-4">Daftar Transaksi</h5>
                     <div class="w-100">
                         <table class="table table-striped table-hover" id="table-data">

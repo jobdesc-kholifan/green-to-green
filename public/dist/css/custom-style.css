@@ -59,6 +59,14 @@ h3.form-title {
     .modal-dialog-centered.modal-dialog-confirm {
         min-height: 100%!important;
     }
+
+    .w-md-25 {
+        width: 25%!important;
+    }
+}
+
+.w-sm-50 {
+    width: 50%;
 }
 
 /* Customer Style*/

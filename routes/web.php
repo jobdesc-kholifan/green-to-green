@@ -59,7 +59,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::group(['prefix' => 'config'], function($query) {
         Route::get('select', [ConfigController::class, 'select'])->name(DBRoutes::configSelect);
 
-        Route::get('', [ConfigController::class, 'index'])->name(DBRoutes::config);
+        Route::get('', [ConfigController::class, 'index'])->name(DBRoutes::configInfo);
         Route::get('{id}', [ConfigController::class, 'info']);
     });
 

@@ -111,7 +111,7 @@ const ListFriends = function(selector, options = {}) {
     this.$ = $(selector);
     this.options = new ListFriendsOptions(options);
 
-    this.$item = $('<div>', {class: 'col-2'}).append(
+    this.$item = $('<div>', {class: 'col-6 col-sm-3 mb-2'}).append(
         $('<div>', {class: 'shadow bg-white rounded'}).append(
             $('<div>', {class: 'p-3 bg-white rounded'}).append(
                 $('<div>', {class: 'position-relative'}).append(
@@ -120,7 +120,7 @@ const ListFriends = function(selector, options = {}) {
                 ),
                 $('<h6>', {class: 'text-bold text-overflow-ellipsis mb-0', 'data-action': 'full-name'}),
                 $('<div>', {class: 'text-sm text-overflow-ellipsis mb-2', 'data-action': 'user-name'}).css({height: 20}),
-                $('<p>', {class: 'block-ellipsis-2', 'data-action': 'bio'}).css({height: 40, lineHeight: 1.2}),
+                $('<p>', {class: 'block-ellipsis-2 d-none d-md-block', 'data-action': 'bio'}).css({height: 40, lineHeight: 1.2}),
                 $('<div>', {class: 'text-xs line-height-1 mb-2 text-overflow-ellipsis', 'data-action': 'message'}).css({height: 15}),
                 $('<div>', {class: 'd-flex'}).append(
                     $('<button>', {type: 'button', class: 'btn btn-primary btn-sm mr-1', 'data-action': 'show-info'}).append(

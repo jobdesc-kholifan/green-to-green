@@ -15,6 +15,7 @@ class DBRoutes
     const achievement = 'achievement';
 
     const config = 'config';
+    const configInfo = 'config.info';
     const configSelect = 'config.select';
 
     const user = 'user';

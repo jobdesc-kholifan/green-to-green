@@ -19,8 +19,9 @@
                         <table class="table table-striped table-hover" id="table-data">
                             <thead>
                             <tr>
-                                <th data-name="no" data-orderable="false" data-searchable="false" style="width: 50px"></th>
+                                <th data-name="no" data-orderable="false" data-searchable="false" style="width: 50px">No</th>
                                 <th data-data="title" data-name="title">Nama</th>
+                                <th data-data="sequence" data-name="sequence" class="text-center" style="width: 100px">Urutan</th>
                                 <th data-data="status.config_name" data-name="status.config_name" style="width: 200px">Status</th>
                                 <th data-data="action" data-orderable="false" data-searchable="false" style="width: 200px">Aksi</th>
                             </tr>
@@ -50,6 +51,12 @@
                 render: (data, type, row, meta) => {
                     return meta.row + meta.settings._iDisplayStart + 1;
                 },
+            },
+            {
+                targets: 2,
+                render: (data) => {
+                    return `<div class="text-center">${data}</div>`;
+                },
             }
         ];
         actions.callback.form.appendData = function(data) {
@@ -78,7 +85,7 @@
 
             achievementTask = new AchievementTask('#form-tasks', {
                 routes: {
-                    task: "{{ route(DBRoutes::config) }}",
+                    task: "{{ route(DBRoutes::configInfo) }}",
                     selectTask: "{{ route(DBRoutes::configSelect) }}"
                 },
                 types: {

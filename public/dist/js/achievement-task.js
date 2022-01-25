@@ -47,6 +47,7 @@ TaskForm.prototype.init = function() {
 
     this.$btnAdd.click(() => {
         this.__achievement.add();
+        this.$btnAdd.addClass('d-none');
     });
 
     this.$btnRemove.click(() => {
@@ -59,17 +60,15 @@ TaskForm.prototype.init = function() {
                 else $element.val(null);
             });
         } else this.$.remove();
-    });
 
-    if(this.__achievement.$.children().last().length > 0)
-        this.__achievement.$.children().last().data(AchievementConfig.keyForm).$btnRemove.removeClass('d-none');
+        this.__achievement.$.children().last().data(AchievementConfig.keyForm).$btnAdd.removeClass('d-none');
+    });
 };
 
 TaskForm.prototype.renderForm = function(payload) {
     const jsonPayload = JSON.parse(payload);
 
     this.$wrapperForm.empty();
-    console.log(jsonPayload.elements);
     jsonPayload.elements.forEach((element) => {
         const $element = $(element.tag);
         Object.keys(element.attributes).forEach((key) => {
@@ -110,9 +109,7 @@ TaskForm.prototype.renderForm = function(payload) {
         if(jsonPayload.requirement !== undefined && jsonPayload.requirement[element.name])
             if(element.tag === '<select>' && jsonPayload.requirement[element.name] !== null) {
                 $element.append($('<option>', {value: jsonPayload.requirement[element.name].value}).text(jsonPayload.requirement[element.name].text));
-                console.log("here");
             } else {
-                console.log(jsonPayload.requirement[element.name]);
                 $element.val(jsonPayload.requirement[element.name])
             }
 
@@ -135,7 +132,7 @@ const AchievementTask = function(element, options) {
                 $('<i>', {class: 'fa fa-trash mr-1'}),
                 $('<span>').html('Hapus')
             ),
-            $('<button>', {type: 'button', class: 'btn btn-outline-primary btn-sm', 'data-action': 'add'}).append(
+            $('<button>', {type: 'button', class: 'btn btn-outline-primary btn-sm d-none', 'data-action': 'add'}).append(
                 $('<i>', {class: 'fa fa-plus-circle mr-1'}),
                 $('<span>').html('Tambah')
             )
@@ -152,6 +149,7 @@ AchievementTask.prototype.add = function() {
     $form.data(AchievementConfig.keyData, data);
 
     this.$.append($form);
+    this.$.children().last().data(AchievementConfig.keyForm).$btnAdd.removeClass('d-none');
 
     return $form;
 };
@@ -164,8 +162,11 @@ AchievementTask.prototype.set = function(items) {
         $form.data(AchievementConfig.keyData, data);
 
         form.$selectTask.append($('<option>', {value: data.task_type_id}).html(data.task_type.text));
+        form.$btnAdd.addClass('d-none');
         form.renderForm(data.payload);
     });
+
+    this.$.children().last().data(AchievementConfig.keyForm).$btnAdd.removeClass('d-none');
 };
 
 AchievementTask.prototype.toJson = function() {

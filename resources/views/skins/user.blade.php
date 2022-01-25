@@ -42,22 +42,29 @@ $user = new UserCollection(User::foreignWith(null)
             <a href="{{ url('/') }}" class="navbar-brand">
                 <span class="brand-text font-weight-light">Green To Green</span>
             </a>
+            <button class="navbar-toggler order-1 collapsed" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <div class="collapse navbar-collapse order-3" id="navbarCollapse">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav w-100">
                     @if(in_array($user->getRole()->getSlug(), $guardsAdmin))
                     <li class="nav-item">
                         <a href="{{ route(DBRoutes::administrator) }}" class="nav-link">Admin Page</a>
                     </li>
                     @endif
+                    <li class="nav-item dropdown ml-auto d-none d-md-block">
+                        <a class="nav-link pr-0" href="javascript:Auth.signOut()">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown d-sm-block d-md-none">
+                        <a class="nav-link d-flex justify-content-between align-items-center" href="javascript:Auth.signOut()">
+                            <span>Keluar</span>
+                            <i class="fas fa-sign-out-alt mt-2"></i>
+                        </a>
+                    </li>
                 </ul>
             </div>
-            <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="javascript:Auth.signOut()">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </a>
-                </li>
-            </ul>
         </div>
     </nav>
 

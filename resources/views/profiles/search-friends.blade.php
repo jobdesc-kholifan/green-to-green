@@ -4,9 +4,9 @@
     <x-content-header container="container" :title='$title' :breadcrumbs="$breadcrumbs"/>
 
     <div class="content">
-        <div class="container">
+        <div class="container mb-4">
             <div class="row mb-4">
-                <div class="offset-2 col-8">
+                <div class="offset-md-2 col-12 col-md-8">
                     <div class="">
                         <label for="input-search" class="d-none"></label>
                         <div class="input-group border rounded-pill bg-light border-olive">

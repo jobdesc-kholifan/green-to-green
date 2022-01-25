@@ -18,7 +18,7 @@
                 <div class="card shadow rounded-50 mb-5">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-12 col-md-6 mb-2">
                                 <div class="">
                                     <label for="input-pickup" class="d-none"></label>
                                     <div class="input-group border rounded-pill bg-light border-olive">
@@ -40,7 +40,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-12 col-md-6 mb2">
                                 <div class="">
                                     <label for="input-pickup" class="d-none"></label>
                                     <div class="input-group border rounded-pill bg-light border-olive">
@@ -65,15 +65,15 @@
                 <div class="mb-5">
                     <h3 class="d-flex justify-content-between align-items-center mb-4">
                         <span>Detail Pemesanan</span>
-                        <button type="button" class="btn btn-success rounded-pill btn-sm" onclick="orderDetail.add()">
-                            <i class="fa fa-plus-circle mr-1"></i>
-                            <span>Tambah</span>
+                        <button type="button" class="btn btn-success rounded-pill btn-sm d-flex align-items-center" onclick="orderDetail.add()">
+                            <i class="fa fa-plus-circle mr-md-1 py-1"></i>
+                            <span class="d-none d-md-block">Tambah</span>
                         </button>
                     </h3>
                     <div id="order-detail"></div>
                 </div>
-                <div class="text-right">
-                    <button type="submit" class="btn btn-success btn-lg rounded-pill w-25">
+                <div class="text-right pb-3">
+                    <button type="submit" class="btn btn-success btn-lg rounded-pill w-sm-50 w-md-25">
                         <span>Order</span>
                     </button>
                 </div>

@@ -14,7 +14,7 @@
         <div class="container">
             <div class="row">
                 @foreach($achievements as $achievement)
-                <div class="col-3">
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
                     <div class="card card-outline card-olive shadow {{$achievement->getUserAchievement()->getId() == null ? 'lock' : ''}}">
                         @if($achievement->getUserAchievement()->getId() == null)
                             <div class="lock-icon text-olive" style="top: 40%">
