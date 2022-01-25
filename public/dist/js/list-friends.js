@@ -111,7 +111,7 @@ const ListFriends = function(selector, options = {}) {
     this.$ = $(selector);
     this.options = new ListFriendsOptions(options);
 
-    this.$item = $('<div>', {class: 'col-6 col-sm-3 mb-2'}).append(
+    this.$item = $('<div>', {class: 'col-6 col-sm-3 col-md-2 mb-2'}).append(
         $('<div>', {class: 'shadow bg-white rounded'}).append(
             $('<div>', {class: 'p-3 bg-white rounded'}).append(
                 $('<div>', {class: 'position-relative'}).append(
