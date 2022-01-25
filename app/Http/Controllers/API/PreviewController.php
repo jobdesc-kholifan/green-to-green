@@ -8,13 +8,10 @@ use Illuminate\Http\Request;
 class PreviewController extends Controller
 {
 
-    public function index(Request $req, $directory, $token)
+    public function index(Request $req, $directory)
     {
         try {
             $pathNotFound = storage_path('app/images/not-found.png');
-
-            if($token != env('APP_KEY_VALUE'))
-                throw new \Exception(\DBMessages::permissionRequired, \DBCodes::authorizedError);
 
             $path = storage_path(str_replace('_', '/', $directory));
             if(!file_exists($path))

@@ -16,7 +16,9 @@ class CreateMsAchievementTable extends Migration
         Schema::create('ms_achievement', function (Blueprint $table) {
             $table->id();
             $table->string('title', 100);
+            $table->integer('sequence');
             $table->text('description')->nullable();
+            $table->text('image')->nullable();
             $table->bigInteger('status_id')->unsigned();
 
             $table->timestamps();

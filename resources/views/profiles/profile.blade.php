@@ -2,6 +2,7 @@
 
 /**
  * @var \App\Helpers\Collections\Users\UserCollection $user
+ * @var \App\Helpers\Collections\Achievements\AchievementCollection[] $achievements
  * */
 
 ?>
@@ -21,6 +22,16 @@
                             </div>
                             <h3 class="profile-username text-center block-ellipsis-2">{{ $user->getFullName() }}</h3>
                             <ul class="list-group list-group-unbordered mb-3">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <b>Achievement</b>
+                                    <div class="text-olive">
+                                        @if(!is_null($user->getAchievements()->first()->getAchievement()->getTitle()))
+                                        <div data-toggle="tooltip" title="{{ $user->getAchievements()->first()->getAchievement()->getTitle() }}" class="img-circle img-contain" style="width: 15px; height: 15px;background-image: url('{{ $user->getAchievements()->first()->getAchievement()->getUrlImage() }}')"></div>
+                                        @else
+                                            -
+                                        @endif
+                                    </div>
+                                </li>
                                 <li class="list-group-item">
                                     <b>Pengikut</b> <a href="javascript:actions.follower()" class="float-right text-olive">{{ IDR($user->getFollowers()->count(), '') }}</a>
                                 </li>
@@ -42,6 +53,7 @@
                         <div class="card-header p-2">
                             <ul class="nav nav-pills nav-olive">
                                 <li class="nav-item"><a class="nav-link{{ $active == 'datadiri' ? ' active' : '' }}" href="#activity" data-toggle="tab">Informasi Akun</a></li>
+                                <li class="nav-item"><a class="nav-link{{ $active == 'achievement' ? ' active' : '' }}" href="#achievement" data-toggle="tab">Achievements</a></li>
                             </ul>
                         </div>
                         <div class="card-body p-0">
@@ -72,6 +84,28 @@
                                         </div>
                                         <div class="mb-1">
                                             <a href="javascript:actions.editProfile()" class="text-sm">Ubah informasi akun</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane{{ $active == 'achievement' ? ' active' : '' }}" id="achievement">
+                                    <div class="p-3">
+                                        <div class="d-flex align-items-center overflow-auto">
+                                            @foreach($achievements as $i => $achievement)
+                                                <div class="text-center px-5 {{$achievement->getUserAchievement()->getId() == null ? 'lock' : ''}}">
+                                                    @if($achievement->getUserAchievement()->getId() == null)
+                                                        <div class="lock-icon text-olive" style="top: 30%">
+                                                            <i class="fa fa-lock fa-3x"></i>
+                                                        </div>
+                                                    @endif
+                                                    <div class="border px-3 py-2 border-width-5 border-olive rounded-circle">
+                                                        <div class="img-circle img-contain mb-2" style="width: 150px;height: 150px;background-image: url('{{ $achievement->getUrlImage() }}')"></div>
+                                                    </div>
+                                                    <h4>{{ $achievement->getTitle() }}</h4>
+                                                </div>
+                                                @if($i < count($achievements) - 1)
+                                                    <i class="fa fa-angle-right fa-2x mb-5"></i>
+                                                @endif
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
@@ -191,5 +225,9 @@
             })
         };
         actions.build();
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
     </script>
 @endpush

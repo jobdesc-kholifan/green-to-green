@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Profiles;
 
 use App\Http\Controllers\Controller;
+use App\Models\Achievements\Achievement;
 use App\Models\Masters\User;
 use App\Models\Masters\UserFollow;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -51,21 +52,26 @@ class SearchFriendsController extends Controller
             /* @var Relation $query */
             $query = $this->user->select('id', 'user_name', 'full_name', 'bio', DBImage())
                 ->with([
-                    'following' => function($query) {
+                    'is_following' => function($query) {
                         UserFollow::foreignWith($query)
                             ->where('user_id', auth()->id())
-                            ->addSelect('user_follow_id');
+                            ->addSelect( 'user_follow_id');
                     },
-                    'follower' => function($query) {
+                    'is_follower' => function($query) {
                         UserFollow::foreignWith($query)
+                            ->where('user_follow_id', auth()->id())
+                            ->addSelect('user_id', 'user_follow_id');
+                    },
+                    'user_achievement' => function($query) {
+                        /* @var Relation $query */
+                        $query->select('user_id', 'achievement_id', 'percentage')
                             ->with([
-                                'user_follow' => function($query) {
-                                    /* @var Relation $query */
-                                    $query->select('id', 'full_name');
+                                'achievement' => function($query) {
+                                    Achievement::foreignWith($query)
+                                        ->addSelect(DBImage('preview', 'image'))
+                                        ->orderBy('sequence');
                                 }
-                            ])
-                            ->where('user_id', auth()->id())
-                            ->addSelect('user_id');
+                            ]);
                     }
                 ])
                 ->whereHas('role', function($query) {

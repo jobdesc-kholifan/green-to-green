@@ -2,6 +2,8 @@
 
 namespace App\Models\Masters;
 
+use App\Helpers\Collections\Users\UserFollowArray;
+use App\Models\Users\UserAchievement;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -114,24 +116,34 @@ class User extends Authenticatable
         return $this->hasOne(Config::class, 'id', 'gender_id');
     }
 
-    public function following()
+    public function is_following()
     {
         return $this->hasOne(UserFollow::class, 'user_follow_id', 'id');
     }
 
     public function followings()
     {
-        return $this->hasMany(UserFollow::class, 'user_follow_id', 'id');
+        return $this->hasMany(UserFollow::class, 'user_id', 'id');
     }
 
-    public function follower()
+    public function is_follower()
     {
-        return $this->hasOne(UserFollow::class, 'user_id', 'id');
+        return $this->hasOne(UserFOllow::class, 'user_id', 'id');
     }
 
     public function followers()
     {
-        return $this->hasMany(UserFollow::class, 'user_id', 'id');
+        return $this->hasMany(UserFollow::class, 'user_follow_id', 'id');
+    }
+
+    public function user_achievements()
+    {
+        return $this->hasMany(UserAchievement::class, 'user_id', 'id');
+    }
+
+    public function user_achievement()
+    {
+        return $this->hasOne(UserAchievement::class, 'user_id', 'id');
     }
 
     public function defaultQuery()

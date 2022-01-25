@@ -7,6 +7,7 @@ use App\Models\Users\UserAchievement;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\DB;
 
 class Achievement extends Model
 {
@@ -16,12 +17,15 @@ class Achievement extends Model
 
     protected $fillable = [
         'title',
+        'sequence',
         'description',
+        'image',
         'status_id',
     ];
 
     public $defaultSelects = [
         'title',
+        'sequence',
         'description',
     ];
 
@@ -81,6 +85,15 @@ class Achievement extends Model
     public function user_achievement()
     {
         return $this->hasOne(UserAchievement::class, 'achievement_id', 'id');
+    }
+
+    public function lastSequence()
+    {
+        /* @var Relation $this */
+        $row = $this->select(DB::raw('MAX(sequence) last_sequence'))
+            ->first();
+
+        return !is_null($row->last_sequence) ? $row->last_sequence : 1;
     }
 
     public function defaultQuery()

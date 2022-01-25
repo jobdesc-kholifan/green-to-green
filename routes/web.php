@@ -52,7 +52,7 @@ Route::get('logout', function(Request $req) {
 Route::group(['middleware' => 'auth'], function() {
     Route::group(['prefix' => 'preview'], function () {
 
-        Route::get('{directory}/{token}/show', [PreviewController::class, 'index']);
+        Route::get('{directory}/show', [PreviewController::class, 'index']);
     });
 
 

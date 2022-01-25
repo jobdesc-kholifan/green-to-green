@@ -15,13 +15,14 @@
             <div class="row">
                 @foreach($achievements as $achievement)
                 <div class="col-3">
-                    <div class="card card-outline card-olive shadow {{$achievement->getUserAchievement()->getId() == null ? 'card-lock' : ''}}">
+                    <div class="card card-outline card-olive shadow {{$achievement->getUserAchievement()->getId() == null ? 'lock' : ''}}">
                         @if($achievement->getUserAchievement()->getId() == null)
-                            <div class="card-lock-icon text-olive">
+                            <div class="lock-icon text-olive" style="top: 40%">
                                 <i class="fa fa-lock fa-3x"></i>
                             </div>
                         @endif
                         <div class="card-body">
+                            <div class="img-contain img-circle mb-2 mx-auto" style="width: 150px;height: 150px;background-image: url('{{ $achievement->getUrlImage() }}')"></div>
                             <h5 class="card-title text-bold mb-2">{{ $achievement->getTitle() }}</h5>
                             <p class="card-text">{{ substr($achievement->getDesc(), 0, 100) }}</p>
                             <h5 class="card-title text-bold mb-2">Tugas</h5>

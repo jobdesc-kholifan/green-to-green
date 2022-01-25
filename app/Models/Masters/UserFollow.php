@@ -64,11 +64,11 @@ class UserFollow extends Model
 
     public function user_following()
     {
-        return $this->hasOne(User::class, 'id', 'user_id');
+        return $this->hasOne(User::class, 'id', 'user_follow_id');
     }
 
     public function user_follower()
     {
-        return $this->hasOne(User::class, 'id', 'user_follow_id');
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

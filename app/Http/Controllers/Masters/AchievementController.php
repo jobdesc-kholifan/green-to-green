@@ -73,9 +73,12 @@ class AchievementController extends Controller
     public function form()
     {
         try {
+            $nextSequence = $this->achievement->lastSequence() + 1;
 
             return response()->json([
-                'content' => $this->viewResponse('achievement-form'),
+                'content' => $this->viewResponse('achievement-form', [
+                    'nextSequence' => $nextSequence,
+                ]),
             ]);
         } catch (\Exception $e) {
             return $this->jsonError($e);
@@ -89,10 +92,22 @@ class AchievementController extends Controller
             DB::beginTransaction();
 
             $config = findConfig()->in([\DBTypes::statusActive]);
+
             $insertAchievement = collect($req->only($this->achievement->getFillable()))
                 ->merge([
+                    'sequence' => $req->get('sequence', $this->achievement->lastSequence() + 1),
                     'status_id' => $config->get(\DBTypes::statusActive)->getId(),
                 ]);
+
+            if($req->has('image')) {
+                $file = $req->file('image');
+                $filename = sprintf("%s.%s", date('YmdHis'), $file->getClientOriginalExtension());
+                if(!$file->move(storage_path('app/achievement'), $filename))
+                    throw new \Exception("Gagal upload file", \DBCodes::authorizedError);
+
+                $insertAchievement->merge(['image' => "app/achievement/$filename"]);
+            }
+
             $achievement = AchievementCollection::create($insertAchievement->toArray());
 
             $tasks = json_decode($req->get('tasks'));
@@ -123,6 +138,7 @@ class AchievementController extends Controller
                             ->addSelect('achievement_id');
                     }
                 ])
+                ->addSelect(DBImage('preview', 'image'))
                 ->find($id);
 
             if(is_null($row))
@@ -139,12 +155,40 @@ class AchievementController extends Controller
         try {
 
             DB::beginTransaction();
-            $row = $this->achievement->find($id, ['id']);
+            $row = $this->achievement->find($id, ['id', 'image']);
 
             if(is_null($row))
                 throw new \Exception(\DBMessages::corruptData, \DBCodes::authorizedError);
 
-            $updateAchievement = collect($req->only($this->achievement->getFillable()));
+            $updateAchievement = collect($req->only($this->achievement->getFillable()))
+                ->merge([
+                    'sequence' => $req->get('sequence', $this->achievement->lastSequence() + 1),
+                ]);
+
+            if($req->has('image')) {
+                $file = $req->file('image');
+                $filename = sprintf("%s.%s", date('YmdHis'), $file->getClientOriginalExtension());
+                if(!$file->move(storage_path('app/achievement'), $filename))
+                    throw new \Exception("Gagal upload file", \DBCodes::authorizedError);
+
+                if(!is_null($row->image)) {
+                    $file = storage_path($row->image);
+                    if(file_exists($file)) unlink($file);
+                }
+
+                $updateAchievement->put("image", "app/achievement/$filename");
+            } else {
+                $deleted = collect($req->get('image_deleted'))
+                    ->filter(function($data) { return $data != ''; });
+                if($deleted->count() > 0) {
+                    if(!is_null($row->image)) {
+                        $file = storage_path($row->image);
+                        if(file_exists($file)) unlink($file);
+                    }
+                    $updateAchievement->put('image', null);
+                }
+            }
+
             $row->update($updateAchievement->toArray());
 
             $achievement = new AchievementCollection($row);
@@ -205,6 +249,7 @@ class AchievementController extends Controller
                             ->addSelect('achievement_id');
                     }
                 ])
+                ->addSelect(DBImage('preview', 'image'))
                 ->find($req->get('id'));
 
             if(is_null($row))

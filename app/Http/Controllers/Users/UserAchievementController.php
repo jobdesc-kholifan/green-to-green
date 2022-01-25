@@ -53,6 +53,8 @@ class UserAchievementController extends Controller
                             ) as user_payload'));
                     }
                 ])
+                ->addSelect(DBImage('preview', 'image'))
+                ->orderBy('sequence')
                 ->get();
 
             $achievement = $query->map(function($data) {

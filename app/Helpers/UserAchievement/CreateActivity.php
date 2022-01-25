@@ -95,6 +95,7 @@ class CreateActivity
     {
         return $this->mAchievement->defaultWith($this->mAchievement->defaultSelects)
             ->whereNotIn('id', $completeAchievement)
+            ->orderBy('sequence', 'asc')
             ->first();
     }
 

@@ -27,5 +27,11 @@ use App\Helpers\Collections\Achievements\AchievementCollection;
                 @endforeach
             </ol>
         </dd>
+        <dt class="col-sm-12">Gambar</dt>
+        @if(!is_null($achievement->getUrlImage()))
+        <dd class="col-sm-12">
+            <div id="input-image" data-files='{"id": 1, "mime_type": "image", "preview": "{{ $achievement->getUrlImage() }}"}'></div>
+        </dd>
+        @endif
     </dl>
 </div>

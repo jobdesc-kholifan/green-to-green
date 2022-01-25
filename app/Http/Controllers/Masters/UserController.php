@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Masters;
 
 use App\Helpers\Collections\Users\UserCollection;
 use App\Http\Controllers\Controller;
+use App\Models\Achievements\Achievement;
 use App\Models\Masters\User;
 use App\View\Components\Button;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -187,6 +188,19 @@ class UserController extends Controller
     {
         try {
             $row = $this->user->defaultQuery()
+                ->with([
+                    'user_achievement' => function($query) {
+                        /* @var Relation $query */
+                        $query->select('user_id', 'achievement_id', 'percentage')
+                            ->with([
+                                'achievement' => function($query) {
+                                    Achievement::foreignWith($query)
+                                        ->addSelect(DBImage('preview', 'image'))
+                                        ->orderBy('sequence');
+                                }
+                            ]);
+                    }
+                ])
                 ->find($req->get('id'));
 
             if(is_null($row))

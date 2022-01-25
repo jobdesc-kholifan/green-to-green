@@ -36,8 +36,9 @@
 @push('script-footer')
     <script src="{{ asset('dist/js/actions.js') }}"></script>
     <script src="{{ asset('dist/js/achievement-task.js') }}"></script>
+    <script src="{{ asset('dist/js/upload.js') }}"></script>
     <script type="text/javascript">
-        let achievementTask;
+        let achievementTask, fileAchievement;
         const actions = new Actions("{{ url()->current() }}");
         actions.datatable.params = {
             _token: "{{ csrf_token() }}",
@@ -60,8 +61,21 @@
         };
         actions.callback.onEdit = function(data) {
             achievementTask.set(data.tasks);
+            if(data.preview !== null)
+                fileAchievement.set({
+                    id: 1,
+                    mime_type: 'image',
+                    preview: data.preview
+                });
         };
         actions.callback.modal.onLoadComplete = function(res) {
+            fileAchievement = $('#input-image').upload({
+                name: 'image',
+                allowed: ['image/*'],
+                getMimeType: (file) => file.mime_type,
+                getPreview: (file) => file.preview
+            });
+
             achievementTask = new AchievementTask('#form-tasks', {
                 routes: {
                     task: "{{ route(DBRoutes::config) }}",
@@ -76,6 +90,15 @@
             $.createModal({
                 url: '{{ url()->current() }}/detail',
                 data: {id: id},
+                onLoadComplete: () => {
+                    fileAchievement = $('#input-image').upload({
+                        readOnly: true,
+                        name: 'image',
+                        allowed: ['image/*'],
+                        getMimeType: (file) => file.mime_type,
+                        getPreview: (file) => file.preview
+                    });
+                }
             }).open();
         };
         actions.build();

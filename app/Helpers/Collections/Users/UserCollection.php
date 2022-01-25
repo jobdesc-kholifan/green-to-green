@@ -154,4 +154,20 @@ class UserCollection extends Collection
     {
         return $this->get('preview');
     }
+
+    public function getAchievements()
+    {
+        if($this->hasNotEmpty('user_achievements'))
+            return new UserAchievementArray($this->get('user_achievements'));
+
+        return new UserAchievementArray([]);
+    }
+
+    public function getUserAchievement()
+    {
+        if($this->hasNotEmpty('user_achievement'))
+            return new UserAchievementCollection($this->get('user_achievement'));
+
+        return new UserAchievementCollection([]);
+    }
 }

@@ -72,4 +72,9 @@ class AchievementCollection extends Collection
 
         return new UserAchievementCollection();
     }
+
+    public function getUrlImage()
+    {
+        return $this->get('preview');
+    }
 }

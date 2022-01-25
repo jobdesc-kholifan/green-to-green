@@ -269,7 +269,7 @@ dl.row.font-size-md > dt, dl.row.font-size-md > dd {
 .nav-pills.nav-olive .nav-link:not(.active):hover {
     color: #3d9970;
 }
-.card.card-lock:before {
+.lock:before {
     content: '';
     position: absolute;
     left: 0;
@@ -280,16 +280,19 @@ dl.row.font-size-md > dt, dl.row.font-size-md > dd {
     z-index: 9999;
     border-radius: 5px;
 }
-.card.card-lock:hover {
+.lock {
+    position: relative;
+}
+.lock:hover {
     cursor: not-allowed;
 }
-.card.card-lock .card-lock-icon {
+.lock .lock-icon {
     position: absolute;
     z-index: 99999;
-    height: 100%;
-    width: 100%;
     text-align: center;
-    top: 40%;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 .line-height-1 {
     line-height: 1!important;
@@ -311,4 +314,12 @@ dl.row.font-size-md > dt, dl.row.font-size-md > dd {
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
+}
+.border-width-5 {
+    border-width: 5px!important;
+}
+.img-bottom-right {
+    position: absolute;
+    bottom: 0;
+    right: 10%;
 }

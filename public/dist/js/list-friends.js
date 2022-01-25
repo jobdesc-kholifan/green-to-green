@@ -13,9 +13,10 @@ const ListFriendsData = function(data) {
     this.full_name = data.full_name !== undefined ? data.full_name : null;
     this.user_name = data.user_name !== undefined ? data.user_name : null;
     this.bio = data.bio !== undefined && data.bio !== null ? data.bio : '-';
-    this.following = data.following !== undefined ? data.following : null;
-    this.follower = data.follower !== undefined ? data.follower : null;
+    this.is_following = data.is_following !== undefined ? data.is_following : null;
+    this.is_follower = data.is_follower !== undefined ? data.is_follower : null;
     this.preview = data.preview !== undefined ? data.preview : null;
+    this.user_achievement = data.user_achievement !== undefined ? data.user_achievement : null;
 };
 
 const ListFriendsItem = function(item, list) {
@@ -30,6 +31,7 @@ const ListFriendsItem = function(item, list) {
     this.$btnFollowing = $(this.$.find('[data-action=following]'));
     this.$message = $(this.$.find('[data-action=message]'));
     this.$image = $(this.$.find('[data-action=image]'));
+    this.$imageAchievement = $(this.$.find('[data-action=image-achievement]'));
 };
 
 ListFriendsItem.prototype.init = function() {
@@ -39,11 +41,17 @@ ListFriendsItem.prototype.init = function() {
     this.$username.html(data.user_name);
     this.$bio.html(data.bio);
     this.$image.css({backgroundImage: `url(${data.preview})`});
+    if(data.user_achievement !== null && data.user_achievement.achievement !== null)
+        if(data.user_achievement.achievement.preview !== null) {
+            this.$imageAchievement.css({backgroundImage: `url(${data.user_achievement.achievement.preview})`});
+            this.$imageAchievement.attr('title', data.user_achievement.achievement.title);
+            this.$imageAchievement.tooltip();
+        }
 
-    if(data.following === null) {
+    if(data.is_following === null) {
         this.$btnFollow.removeClass('d-none');
 
-        if(data.follower !== null) {
+        if(data.is_follower !== null) {
             this.$btnFollow.empty();
             this.$btnFollow.append(
                 $('<i>', {class: 'fa fa-plus-circle mr-1'}),
@@ -53,7 +61,7 @@ ListFriendsItem.prototype.init = function() {
         }
     }
 
-    if(data.following !== null)
+    if(data.is_following !== null)
         this.$btnFollowing.removeClass('d-none');
 
     this.$btnFollow.click(() => {
@@ -106,7 +114,10 @@ const ListFriends = function(selector, options = {}) {
     this.$item = $('<div>', {class: 'col-2'}).append(
         $('<div>', {class: 'shadow bg-white rounded'}).append(
             $('<div>', {class: 'p-3 bg-white rounded'}).append(
-                $('<div>', {class: 'img-circle mx-auto mb-3 bg-light img-contain', 'data-action': 'image'}).css({width: 100, height: 100}),
+                $('<div>', {class: 'position-relative'}).append(
+                    $('<div>', {class: 'img-circle mx-auto mb-3 bg-light img-contain', 'data-action': 'image'}).css({width: 100, height: 100}),
+                    $('<div>', {class: 'img-circle mx-auto bg-light img-contain img-bottom-right', 'data-action': 'image-achievement'}).css({width: 30, height: 30, right: '15%'}),
+                ),
                 $('<h6>', {class: 'text-bold text-overflow-ellipsis mb-0', 'data-action': 'full-name'}),
                 $('<div>', {class: 'text-sm text-overflow-ellipsis mb-2', 'data-action': 'user-name'}).css({height: 20}),
                 $('<p>', {class: 'block-ellipsis-2', 'data-action': 'bio'}).css({height: 40, lineHeight: 1.2}),
@@ -136,13 +147,11 @@ ListFriends.prototype.search = function(value) {
                     searchValue: value,
                 },
                 success: (res) => {
-                    if(res.result && res.data.length > 0) {
-                        this.$.empty();
+                    this.$.empty();
+                    this.$.append($('<h5>', {class: 'col-12 mb-3'}).html(`Hasil Pencarian '${value}'`));
 
-                        this.$.append($('<h5>', {class: 'col-12 mb-3'}).html(`Hasil Pencarian '${value}'`));
-
+                    if(res.result && res.data.length > 0)
                         this.render(res.data);
-                    }
 
                     else if(res.result && res.data.length === 0)
                         this.renderNotFound();
@@ -163,13 +172,11 @@ ListFriends.prototype.suggest = function(number) {
                 random: number,
             },
             success: (res) => {
-                if(res.result && res.data.length > 0) {
-                    this.$.empty();
+                this.$.empty();
+                this.$.append($('<h5>', {class: 'col-12 mb-3'}).html('Orang yang mungkin anda kenal'));
 
-                    this.$.append($('<h5>', {class: 'col-12 mb-3'}).html('Orang yang mungkin anda kenal'));
-
+                if(res.result && res.data.length > 0)
                     this.render(res.data);
-                }
 
                 else if(res.result && res.data.length === 0)
                     this.renderNotFound("Tidak menemukan data");
@@ -200,7 +207,7 @@ ListFriends.prototype.render = function(items) {
 };
 
 ListFriends.prototype.renderNotFound = function(message) {
-    this.$.html(
-        $('<i>', {class: 'text-center'}).html(message === undefined ? "Kami tidak menemukan teman yang anda cari" : message),
-    );
+    this.$.append(($('<div>', {class: 'col-12'}).html(
+        $('<i>', {class: 'text-center'}).html(message === undefined ? "Kami tidak menemukan teman yang anda cari" : message)
+    )));
 };
