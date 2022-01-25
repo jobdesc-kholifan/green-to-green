@@ -140,20 +140,20 @@ const ListFriends = function(selector, options = {}) {
 };
 
 ListFriends.prototype.search = function(value) {
-    this.$.empty();
-    this.$.append($('<h5>', {class: 'col-12 mb-3'}).html(`Hasil Pencarian '${value}'`));
-    
     if(this.options.routes.search !== null)
-        if(value !== '')
+        if(value !== '') {
+            this.$.empty();
+            this.$.append($('<h5>', {class: 'col-12 mb-3'}).html(`Hasil Pencarian '${value}'`));
+
             ServiceAjax.get(this.options.routes.search, {
                 data: {
                     searchValue: value,
                 },
                 success: (res) => {
-                    if(res.result && res.data.length > 0)
+                    if (res.result && res.data.length > 0)
                         this.render(res.data);
 
-                    else if(res.result && res.data.length === 0)
+                    else if (res.result && res.data.length === 0)
                         this.renderNotFound();
                 },
                 error: () => {
@@ -162,7 +162,7 @@ ListFriends.prototype.search = function(value) {
                     });
                 }
             })
-        else this.suggest(6);
+        } else this.suggest(6);
 };
 
 ListFriends.prototype.suggest = function(number) {
