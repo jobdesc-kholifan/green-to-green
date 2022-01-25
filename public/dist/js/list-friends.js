@@ -140,6 +140,9 @@ const ListFriends = function(selector, options = {}) {
 };
 
 ListFriends.prototype.search = function(value) {
+    this.$.empty();
+    this.$.append($('<h5>', {class: 'col-12 mb-3'}).html(`Hasil Pencarian '${value}'`));
+    
     if(this.options.routes.search !== null)
         if(value !== '')
             ServiceAjax.get(this.options.routes.search, {
@@ -147,9 +150,6 @@ ListFriends.prototype.search = function(value) {
                     searchValue: value,
                 },
                 success: (res) => {
-                    this.$.empty();
-                    this.$.append($('<h5>', {class: 'col-12 mb-3'}).html(`Hasil Pencarian '${value}'`));
-
                     if(res.result && res.data.length > 0)
                         this.render(res.data);
 
@@ -166,15 +166,15 @@ ListFriends.prototype.search = function(value) {
 };
 
 ListFriends.prototype.suggest = function(number) {
+    this.$.empty();
+    this.$.append($('<h5>', {class: 'col-12 mb-3'}).html('Orang yang mungkin anda kenal'));
+
     if(this.options.routes.search !== null)
         ServiceAjax.get(this.options.routes.search, {
             data: {
                 random: number,
             },
             success: (res) => {
-                this.$.empty();
-                this.$.append($('<h5>', {class: 'col-12 mb-3'}).html('Orang yang mungkin anda kenal'));
-
                 if(res.result && res.data.length > 0)
                     this.render(res.data);
 
