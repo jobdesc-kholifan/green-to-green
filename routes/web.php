@@ -60,7 +60,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('select', [ConfigController::class, 'select'])->name(DBRoutes::configSelect);
 
         Route::get('', [ConfigController::class, 'index'])->name(DBRoutes::config);
-        Route::get('{id}', [ConfigController::class, 'show']);
+        Route::get('{id}', [ConfigController::class, 'info']);
     });
 
     Route::get('/', [AppController::class, 'index']);
@@ -104,6 +104,21 @@ Route::group(['middleware' => 'auth'], function() {
     Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function() {
 
         Route::get('', [AppController::class, 'admin'])->name(DBRoutes::administrator);
+
+        Route::group(['prefix' => 'config'], function () {
+            Route::get('select', [ConfigController::class, 'select'])->name(DBRoutes::configSelect);
+
+            Route::group(['prefix' => '{slug}'], function () {
+                Route::post('datatables', [ConfigController::class, 'datatables']);
+                Route::get('form', [ConfigController::class, 'form']);
+
+                Route::get('', [ConfigController::class, 'index'])->name(DBRoutes::config);
+                Route::post('', [ConfigController::class, 'store']);
+                Route::get('{id}', [ConfigController::class, 'show']);
+                Route::post('{id}', [ConfigController::class, 'update']);
+                Route::delete('{id}', [ConfigController::class, 'destroy']);
+            });
+        });
 
         Route::group(['prefix' => 'achievement'], function() {
             Route::post('datatables', [AchievementController::class, 'datatables']);

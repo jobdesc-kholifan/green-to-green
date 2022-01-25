@@ -26,6 +26,12 @@
                         <p>Users</p>
                     </a>
                 </li>
+                <li class="nav-item{{ isParentMenuOpen(DBRoutes::config."/".DBTypes::rubbishCategory, $route) }}">
+                    <a href="{{ route(DBRoutes::config, ['slug' => DBTypes::rubbishCategory]) }}" class="nav-link{{ isMenuActive($route, DBRoutes::config."/".DBTypes::rubbishCategory) }}">
+                        <i class="nav-icon fas fa-user"></i>
+                        <p>Kategori Sampah</p>
+                    </a>
+                </li>
                 <li class="nav-item{{ isParentMenuOpen(DBRoutes::order, $route) }}">
                     <a href="{{ route(DBRoutes::order) }}" class="nav-link{{ isMenuActive($route, DBRoutes::order) }}">
                         <i class="nav-icon fas fa-user"></i>
