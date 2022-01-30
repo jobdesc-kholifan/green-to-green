@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'guest'], function() {
     Route::get('sign-in', [AuthController::class, 'signIn'])->name(DBRoutes::authSignIn);
     Route::post('sign-in', [AuthController::class, 'processSignIn']);
+    Route::get('twitter-login', [AuthController::class, 'processTwitterSignIn'])->name(DBRoutes::authTwitterSignIn);
     Route::post('google-login', [AuthController::class, 'processGoogleSignIn'])->name(DBRoutes::authGoogleSignIn);
     Route::get('complete-signup', [AuthController::class, 'completeSignUp'])->name(DBRoutes::authCompleteSignUp);
     Route::post('complete-signup', [AuthController::class, 'processCompleteSignUp']);
@@ -56,11 +57,8 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
 
-    Route::group(['prefix' => 'config'], function($query) {
-        Route::get('select', [ConfigController::class, 'select'])->name(DBRoutes::configSelect);
-
-        Route::get('', [ConfigController::class, 'index'])->name(DBRoutes::configInfo);
-        Route::get('{id}', [ConfigController::class, 'info']);
+    Route::group(['prefix' => 'data'], function() {
+        Route::get('select', [ConfigController::class, 'select'])->name(DBRoutes::dataConfigSelect);
     });
 
     Route::get('/', [AppController::class, 'index']);
@@ -107,6 +105,8 @@ Route::group(['middleware' => 'auth'], function() {
 
         Route::group(['prefix' => 'config'], function () {
             Route::get('select', [ConfigController::class, 'select'])->name(DBRoutes::configSelect);
+            Route::get('', [ConfigController::class, 'index'])->name(DBRoutes::configInfo);
+            Route::get('{id}', [ConfigController::class, 'info']);
 
             Route::group(['prefix' => '{slug}'], function () {
                 Route::post('datatables', [ConfigController::class, 'datatables']);

@@ -6,6 +6,7 @@ class DBRoutes
     const authSignIn = 'auth.sign-in';
     const authLogout = 'auth.logout';
     const authGoogleSignIn = 'auth.google-sign-in';
+    const authTwitterSignIn = 'auth.sign-in-twitter';
     const authCompleteSignUp = 'auth.complete-signup';
     const authSignUp = 'auth.sign-up';
     const authCheck = 'auth.check';
@@ -17,6 +18,8 @@ class DBRoutes
     const config = 'config';
     const configInfo = 'config.info';
     const configSelect = 'config.select';
+
+    const dataConfigSelect = 'data.config';
 
     const user = 'user';
     const userCheck = 'user.check';

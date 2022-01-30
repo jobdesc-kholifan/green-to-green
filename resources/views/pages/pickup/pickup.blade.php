@@ -112,7 +112,7 @@
         });
 
         const orderDetail = new OrderDetail('#order-detail', {
-            routes: { selectCategory: "{{ route(DBRoutes::configSelect) }}"},
+            routes: { selectCategory: "{{ route(DBRoutes::dataConfigSelect) }}"},
             slugs: { rubbishCategory: "{{ DBTypes::rubbishCategory }}"}
         });
         orderDetail.add();
