@@ -107,8 +107,8 @@ Route::group(['middleware' => 'auth'], function() {
 
         Route::group(['prefix' => 'config'], function () {
             Route::get('select', [ConfigController::class, 'select'])->name(DBRoutes::configSelect);
-            Route::get('', [ConfigController::class, 'index'])->name(DBRoutes::configInfo);
-            Route::get('{id}', [ConfigController::class, 'info']);
+            Route::get('info', [ConfigController::class, 'index'])->name(DBRoutes::configInfo);
+            Route::get('info/{id}', [ConfigController::class, 'info']);
 
             Route::group(['prefix' => '{slug}'], function () {
                 Route::post('datatables', [ConfigController::class, 'datatables']);

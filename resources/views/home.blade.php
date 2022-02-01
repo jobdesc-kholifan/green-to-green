@@ -52,19 +52,19 @@
                     <div class="font-weight-normal mb-1">Status</div>
                     @foreach($statues->all() as $status)
                         <div class="custom-control custom-checkbox">
-                            <input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="{{ $status->getSlug() }}">
+                            <input name="filter_status[]" class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="{{ $status->getSlug() }}" value="{{ $status->getId() }}">
                             <label for="{{ $status->getSlug() }}" class="custom-control-label font-weight-light">{{ $status->getName() }}</label>
                         </div>
                     @endforeach
                     <div class="font-weight-normal mt-3 mb-1">Kategori Sampah</div>
                     @foreach($categoryRubbish->all() as $category)
                         <div class="custom-control custom-checkbox">
-                            <input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="{{ $category->getSlug() }}">
+                            <input name="filter_category[]" class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="{{ $category->getSlug() }}" value="{{ $category->getId() }}">
                             <label for="{{ $category->getSlug() }}" class="custom-control-label font-weight-light">{{ $category->getName() }}</label>
                         </div>
                     @endforeach
                     <div class="mt-3 mb-3">
-                        <button type="button" class="btn bg-olive btn-block btn-sm">
+                        <button type="button" class="btn bg-olive btn-block btn-sm" onclick="actions.datatable.reload()">
                             <i class="fa fa-filter mr-2"></i>
                             <span>Filter</span>
                         </button>
@@ -107,7 +107,15 @@
         const actions = new Actions("{{ url()->current() }}");
         actions.datatable.params = {
             _token: "{{ csrf_token() }}",
-        };
+            filter_category: () => $('[name="filter_category[]"]').filter(function(i, item) { return $(item).prop('checked'); })
+                .map(function(i, item) {
+                    return $(item).val();
+                }).get(),
+            filter_status: () => $('[name="filter_status[]"]').filter(function(i, item) { return $(item).prop('checked'); })
+                .map(function(i, item) {
+                    return $(item).val();
+                }).get(),
+        }
         actions.routes.datatable = "{{ url()->current() }}/datatables-order";
         actions.detail = function(id) {
             $.createModal({

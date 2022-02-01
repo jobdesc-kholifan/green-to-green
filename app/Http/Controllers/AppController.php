@@ -6,6 +6,7 @@ use App\Helpers\Collections\Orders\OrderCollection;
 use App\Models\Masters\User;
 use App\Models\Orders\Order;
 use App\View\Components\Button;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 
 class AppController extends Controller
@@ -34,12 +35,31 @@ class AppController extends Controller
         }
     }
 
-    public function datatablesOrder()
+    public function datatablesOrder(Request $req)
     {
         try {
             $query = $this->order->defaultQuery()
                 ->addSelect('created_at')
                 ->where('user_id', auth()->id());
+
+            if($req->has('filter_category')) {
+                $filterCategory = collect(explode(",", $req->get('filter_category')))->filter(function($data) {
+                    return $data != '';
+                });
+                if($filterCategory->count() > 0)
+                    $query->whereHas('rubbish', function($query) use ($filterCategory) {
+                        /* @var Relation $query */
+                        $query->whereIn('category_id', $filterCategory->toArray());
+                    });
+            }
+
+            if($req->has('filter_status')) {
+                $filterStatus = collect(explode(",", $req->get('filter_status')))->filter(function($data) {
+                    return $data != '';
+                });
+                if ($filterStatus->count() > 0)
+                    $query->whereIn('status_id', $filterStatus->toArray());
+            }
 
             return datatables()->eloquent($query)
                 ->editColumn('created_at', function($data) {

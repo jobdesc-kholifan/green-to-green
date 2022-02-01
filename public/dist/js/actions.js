@@ -162,9 +162,23 @@ ActionsDatatable.prototype.init = function() {
             url: this.url,
             type: this.type,
             data: (param) => {
-                Object.keys(this.params).forEach(value => {
-                   param[value] = this.params[value];
-                });
+                if(typeof this.params === 'function') {
+                    Object.keys(this.params(param)).forEach(value => {
+                        if(typeof value === 'function') {
+                            param[value] = this.params[value]();
+                        } else {
+                            param[value] = this.params[value];
+                        }
+                    });
+                } else {
+                    Object.keys(this.params).forEach(value => {
+                        if(typeof value === 'function') {
+                            param[value] = this.params[value]();
+                        } else {
+                            param[value] = this.params[value];
+                        }
+                    });
+                }
                 return param;
             },
         },

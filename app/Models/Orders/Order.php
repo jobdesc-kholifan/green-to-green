@@ -87,6 +87,11 @@ class Order extends Model
         return $this->hasOne(OrderSchedule::class, 'id', 'schedule_id');
     }
 
+    public function rubbish()
+    {
+        return $this->hasMany(OrderRubbish::class, 'order_id', 'id');
+    }
+
     public function defaultQuery()
     {
         return $this->defaultWith($this->defaultSelects)
