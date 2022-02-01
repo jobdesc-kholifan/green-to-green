@@ -65,6 +65,9 @@
         </div>
     </div>
     <div class="sharethis-inline-share-buttons"></div>
+    <div class="text-center mt-5">
+        Copyright © {{ date('Y') }} All rights reserved. <a href="{{ url('/') }}">Green to Green</a>
+    </div>
 </div>
 </body>
 </html>
