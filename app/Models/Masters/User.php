@@ -80,7 +80,7 @@ class User extends Authenticatable
             'gender' => function($query) {
                 Config::foreignWith($query);
             }
-        ])->select($this->getKeyName(), 'gender_id', DBImage())->addSelect($selects);
+        ])->select(sprintf("%s.%s", $this->getTable(), $this->getKeyName()), 'gender_id', DBImage())->addSelect($selects);
     }
 
     /**

@@ -22,7 +22,7 @@
                                 <th data-name="no" data-orderable="false" data-searchable="false" style="width: 50px">No</th>
                                 <th data-data="full_name" data-name="full_name">Nama Lengkap</th>
                                 <th data-data="gender.config_name" data-name="gender.config_name">Jenkel</th>
-                                <th data-data="ttl" data-name="pob">TTL</th>
+                                <th data-data="ttl" data-name="place_of_birth">TTL</th>
                                 <th data-data="email" data-name="email">Email</th>
                                 <th data-data="user_name" data-name="user_name">Nama Pengguna</th>
                                 <th data-data="status.config_name" data-name="status.config_name">Status</th>

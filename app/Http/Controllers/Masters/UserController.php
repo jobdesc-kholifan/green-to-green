@@ -73,7 +73,7 @@ class UserController extends Controller
     {
         try {
             $query = $this->user->defaultQuery()
-                ->where('id', '!=', auth()->id());
+                ->where(sprintf("%s.%s", $this->user->getTable(), $this->user->getKeyName()), '!=', auth()->id());
 
             return datatables()->eloquent($query)
                 ->editColumn('gender', function($data) {
