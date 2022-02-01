@@ -14,7 +14,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="description" content="Green to Green adalah website untuk pickup sampah">
     <title>Green to Green: Kholifan sudah mendapatkan achievement {{ $achievement->getTitle() }} - Green to Green</title>
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Green to Green: Pick up sampah">
     <meta name="twitter:image" content="{{ $achievement->getUrlImage() }}">
+    <meta name="twitter:description" content="Green to Green adalah website untuk pickup sampah">
+    <meta name="twitter:label1" content="Est. reading time">
+    <meta name="twitter:data1" content="1 minute">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
