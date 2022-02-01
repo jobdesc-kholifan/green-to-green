@@ -59,7 +59,7 @@
                     <div class="font-weight-normal mt-3 mb-1">Kategori Sampah</div>
                     @foreach($categoryRubbish->all() as $category)
                         <div class="custom-control custom-checkbox">
-                            <input name="filter_category[]" class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="{{ $category->getSlug() }}" value="{{ $category->getId() }}">
+                            <input name="filter_category[]" class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="filter-{{ $category->getId() }}-id" value="{{ $category->getId() }}">
                             <label for="{{ $category->getSlug() }}" class="custom-control-label font-weight-light">{{ $category->getName() }}</label>
                         </div>
                     @endforeach
