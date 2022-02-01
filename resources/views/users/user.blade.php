@@ -40,7 +40,7 @@
 @push('script-footer')
     <script src="{{ asset('dist/js/actions.js') }}"></script>
     <script type="text/javascript">
-        let achievementTask, $formPassword;
+        let achievementTask, $formPassword, $formUsername;
         const actions = new Actions("{{ url()->current() }}");
         actions.datatable.params = {
             _token: "{{ csrf_token() }}",
@@ -56,6 +56,7 @@
         ];
         actions.callback.modal.onLoadComplete = () => {
             $formPassword = $('[data-name=password]');
+            $formUsername = $('[data-name=username]');
         };
         actions.callback.form.beforeSubmit = function() {
             return FormComponents.validation.isValid();
@@ -63,11 +64,15 @@
         actions.callback.onCreate = function() {
             $formPassword.find('label').addClass('required');
             $formPassword.find('input').prop('required', true);
+            $formUsername.find('label').addClass('required');
+            $formUsername.find('input').prop('required', true);
             FormComponents.validation.init();
         };
         actions.callback.onEdit = function() {
             $formPassword.find('label').removeClass('required');
             $formPassword.find('input').removeAttr('required');
+            $formUsername.find('label').removeClass('required');
+            $formUsername.find('input').removeAttr('required');
         };
         actions.callback.form.onSetData = function(value, key, row, form) {
             const $el = form.find(`[name="${key}"]`);

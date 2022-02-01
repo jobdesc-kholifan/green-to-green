@@ -162,7 +162,7 @@ class UserController extends Controller
                     'date_of_birth' => dbDate($req->get('date_of_birth'))
                 ]);
             if($req->has('password') && !empty($req->get('password')))
-                $updateUser->merge(['user_password' => Hash::make($req->get('password'))]);
+                $updateUser->put('user_password', Hash::make($req->get('password')));
 
             $row->update($updateUser->toArray());
 

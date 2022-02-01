@@ -113,7 +113,7 @@
                 data-params='{"parent_slug": ["{{ DBTypes::role }}"]}'
             ></select>
         </div>
-        <div class="form-group">
+        <div class="form-group" data-name="username">
             <label for="input-username" class="required">Nama Pengguna</label>
             <div class="input-group">
                 <input
