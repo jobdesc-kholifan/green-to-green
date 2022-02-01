@@ -137,7 +137,7 @@
             </div>
             <small class="text-danger" data-action="message"></small>
         </div>
-        <div class="form-group">
+        <div class="form-group" data-name="password">
             <label for="input-password" class="required">Kata Sandi</label>
             <input
                 type="password"
