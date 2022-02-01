@@ -39,7 +39,7 @@ class AppController extends Controller
     {
         try {
             $query = $this->order->defaultQuery()
-                ->addSelect('created_at')
+                ->addSelect('tr_order.created_at')
                 ->where('user_id', auth()->id());
 
             if($req->has('filter_category')) {
