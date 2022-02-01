@@ -171,7 +171,7 @@ class ProfileController extends Controller
                 throw new \Exception(\DBMessages::corruptData, \DBCodes::authorizedError);
 
             if($user->user_password != null)
-                if(!Hash::check($req->get('new_password'), $user->user_password))
+                if(!Hash::check($req->get('old_password'), $user->user_password))
                     throw new \Exception("Kata sandi salah", \DBCodes::authorizedError);
 
             $user->update([
