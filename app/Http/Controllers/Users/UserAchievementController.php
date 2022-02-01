@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Users;
 
 use App\Helpers\Collections\Achievements\AchievementCollection;
+use App\Helpers\Collections\Users\UserCollection;
 use App\Http\Controllers\Controller;
 use App\Models\Achievements\Achievement;
 use App\Models\Achievements\AchievementTask;
@@ -116,7 +117,8 @@ class UserAchievementController extends Controller
             $achievement = new AchievementCollection($query);
 
             return $this->view('share-achievement', [
-                'achievement' => $achievement
+                'achievement' => $achievement,
+                'user' => new UserCollection($user)
             ]);
         } catch (\Exception $e) {
             return $this->jsonError($e);

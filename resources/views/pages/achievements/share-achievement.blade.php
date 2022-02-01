@@ -2,6 +2,7 @@
 
 /**
  * @var \App\Helpers\Collections\Achievements\AchievementCollection $achievement
+ * @var \App\Helpers\Collections\Users\UserCollection $user
  * */
 
 ?>
@@ -13,9 +14,9 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="description" content="Green to Green adalah website untuk pickup sampah">
-    <title>Green to Green: Kholifan sudah mendapatkan achievement {{ $achievement->getTitle() }} - Green to Green</title>
+    <title>Green to Green: {{ $user->getFullName() }} sudah mendapatkan achievement {{ $achievement->getTitle() }} - Green to Green</title>
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Green to Green: Kholifan sudah mendapatkan achievement {{ $achievement->getTitle() }} - Green to Green">
+    <meta name="twitter:title" content="Green to Green: {{ $user->getFullName() }} sudah mendapatkan achievement {{ $achievement->getTitle() }} - Green to Green">
     <meta name="twitter:image" content="{{ $achievement->getUrlImage() }}">
     <meta name="twitter:description" content="Green to Green adalah website untuk pickup sampah">
     <meta name="twitter:label1" content="Est. reading time">
@@ -33,7 +34,7 @@
 <body class="py-5 px-3" style="background-color: #f1f1f1">
 
 <div class="container">
-    <h1 class="text-center mb-5">Kholifan sudah mendapatkan achievement {{ $achievement->getTitle() }}</h1>
+    <h1 class="text-center mb-5">{{ $user->getFullName() }} sudah mendapatkan achievement {{ $achievement->getTitle() }}</h1>
     <div class="row justify-content-center">
         <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3">
             <div class="card card-outline card-olive shadow {{$achievement->getUserAchievement()->getId() == null ? 'lock' : ''}}">
