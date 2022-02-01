@@ -60,7 +60,7 @@
                     @foreach($categoryRubbish->all() as $category)
                         <div class="custom-control custom-checkbox">
                             <input name="filter_category[]" class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="filter-{{ $category->getId() }}-id" value="{{ $category->getId() }}">
-                            <label for="{{ $category->getSlug() }}" class="custom-control-label font-weight-light">{{ $category->getName() }}</label>
+                            <label for="filter-{{ $category->getId() }}-id" class="custom-control-label font-weight-light">{{ $category->getName() }}</label>
                         </div>
                     @endforeach
                     <div class="mt-3 mb-3">
