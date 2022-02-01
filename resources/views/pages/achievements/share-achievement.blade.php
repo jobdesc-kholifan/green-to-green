@@ -16,7 +16,6 @@
     <title>Green to Green: Kholifan sudah mendapatkan achievement {{ $achievement->getTitle() }} - Green to Green</title>
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Green to Green: Pick up sampah">
-    <meta name="twitter:image" content="{{ $achievement->getUrlImage() }}">
     <meta name="twitter:description" content="Green to Green adalah website untuk pickup sampah">
     <meta name="twitter:label1" content="Est. reading time">
     <meta name="twitter:data1" content="1 minute">
