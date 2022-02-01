@@ -10,6 +10,7 @@ class DBRoutes
     const authCompleteSignUp = 'auth.complete-signup';
     const authSignUp = 'auth.sign-up';
     const authCheck = 'auth.check';
+    const authCallbackTwitter = 'auth.callback.twitter';
 
     const administrator = 'administrator';
 
@@ -27,6 +28,7 @@ class DBRoutes
     const userInfo = 'user.info';
 
     const pageAchievement = 'page.achievement';
+    const pageAchievementShare = 'page.achievement.share';
 
     const pagePickUp = 'page.pickup';
 

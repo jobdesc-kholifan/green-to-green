@@ -46,10 +46,10 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button class="btn btn-block bg-olive btn-sm">
+                            <a href="{{ route(DBRoutes::pageAchievementShare, [auth()->id()]) }}?id={{ $achievement->getId() }}" class="btn btn-block bg-olive btn-sm">
                                 <i class="fa fa-share-alt mr-2"></i>
                                 <span>Share</span>
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>

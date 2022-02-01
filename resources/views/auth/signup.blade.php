@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('dist/css/custom-style.css') }}">
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
@@ -44,6 +45,10 @@
                         <i class="fa fa-sign-in-alt"></i> Masuk
                     </button>
                     <div class="g-signin2 mb-2" data-width="320" data-longtitle="true" data-onsuccess="onSignIn"></div>
+                    <a href="{{ route(DBRoutes::authTwitterSignIn) }}" class="btn btn-block bg-blue-twitter mb-2">
+                        <i class="fa fa-twitter mr-1"></i>
+                        <span>Login dengan Twitter</span>
+                    </a>
                     <a href="{{ route(DBRoutes::authSignUp) }}" class="btn btn-block btn-primary mb-2">
                         <span>Daftar Sekarang</span>
                     </a>

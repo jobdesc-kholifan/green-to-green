@@ -331,3 +331,13 @@ dl.row.font-size-md > dt, dl.row.font-size-md > dd {
     bottom: 0;
     right: 10%;
 }
+.bg-blue-twitter {
+    background-color: #1d9bf0;
+    border-color: #1d9bf0;
+    color: #fff;
+}
+.bg-blue-twitter:hover {
+    background-color: #187ec2;
+    border-color: #187ec2;
+    color: #fff;
+}

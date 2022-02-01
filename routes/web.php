@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('share-achievement/{userid}', [UserAchievementController::class, 'share'])->name(DBRoutes::pageAchievementShare);
 
 Route::group(['middleware' => 'guest'], function() {
     Route::get('sign-in', [AuthController::class, 'signIn'])->name(DBRoutes::authSignIn);
@@ -32,6 +33,7 @@ Route::group(['middleware' => 'guest'], function() {
     Route::get('twitter-login', [AuthController::class, 'processTwitterSignIn'])->name(DBRoutes::authTwitterSignIn);
     Route::post('google-login', [AuthController::class, 'processGoogleSignIn'])->name(DBRoutes::authGoogleSignIn);
     Route::get('complete-signup', [AuthController::class, 'completeSignUp'])->name(DBRoutes::authCompleteSignUp);
+    Route::get('callback/twitter', [AuthController::class, 'callbackTwitter'])->name(DBRoutes::authCallbackTwitter);
     Route::post('complete-signup', [AuthController::class, 'processCompleteSignUp']);
     Route::post('complete-signup/skip', [AuthController::class, 'skipSignUp']);
     Route::get('sign-up', [AuthController::class, 'signUp'])->name(DBRoutes::authSignUp);

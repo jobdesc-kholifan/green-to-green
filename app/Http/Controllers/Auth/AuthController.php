@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -136,6 +137,16 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             return $this->jsonError($e);
         }
+    }
+
+    public function processTwitterSignIn(Request $req)
+    {
+        return Socialite::driver('twitter')->redirect();
+    }
+
+    public function callbackTwitter()
+    {
+
     }
 
     public function completeSignUp(Request $req)
