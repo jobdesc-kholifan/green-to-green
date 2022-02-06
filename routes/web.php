@@ -154,8 +154,10 @@ Route::group(['middleware' => 'auth'], function() {
             Route::post('schedule', [OrderController::class, 'processSchedule']);
             Route::post('done', [OrderController::class, 'processDone']);
             Route::get('detail', [OrderController::class, 'detail']);
+            Route::get('form', [OrderController::class, 'form']);
 
             Route::get('', [OrderController::class, 'index'])->name(DBRoutes::order);
+            Route::post('', [RequestPickUpController::class, 'store']);
         });
     });
 });

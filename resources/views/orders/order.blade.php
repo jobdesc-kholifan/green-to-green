@@ -37,9 +37,13 @@
 @endsection
 
 @push('script-footer')
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqxxOFvGe8A4OM8eurAbIiwmXwN0J8ODo&libraries=places&v=weekly" async></script>
     <script src="{{ asset('dist/js/actions.js') }}"></script>
+    <script src="{{ asset('dist/js/map-pickup.js') }}"></script>
+    <script src="{{ asset('dist/js/order-detail.js') }}"></script>
+    <script src="{{ asset('dist/js/custom-select.js') }}"></script>
     <script type="text/javascript">
-        let achievementTask;
+        let achievementTask, map, btnPickAddress, wrapperMap, orderDetail;
         const actions = new Actions("{{ url()->current() }}");
         actions.datatable.params = {
             _token: "{{ csrf_token() }}",
@@ -57,6 +61,65 @@
             $.createModal({
                 url: '{{ url()->current() }}/detail',
                 data: {id: id}
+            }).open();
+        };
+        actions.create = () => {
+            $.createModal({
+                url: '{{ url()->current() }}/form',
+                modalSize: 'modal-lg',
+                onLoadComplete: (res, modal) => {
+                    btnPickAddress = $('#btn-pick-address');
+                    wrapperMap = $('#wrapper-map');
+
+                    btnPickAddress.click(() => {
+                        if(wrapperMap.hasClass('d-none')) {
+                            maps = new MapsPickup('#map', {
+                                onConfirm: (result) => {
+                                    wrapperMap.addClass('d-none');
+                                    btnPickAddress.removeClass('d-none');
+                                    btnPickAddress.find('span').html(result.formatted_address);
+
+                                    $('[name=address]').val(result.formatted_address);
+                                    $('[name=lat_lng]').val(`${result.geometry.location.lat()},${result.geometry.location.lng()}`);
+                                }
+                            });
+                            maps.getCurrentLocation();
+
+                            wrapperMap.removeClass('d-none');
+                            btnPickAddress.addClass('d-none');
+                        } else {
+                            wrapperMap.addClass('d-none');
+                            btnPickAddress.removeClass('d-none');
+                        }
+                    });
+
+                    orderDetail = new OrderDetail('#order-detail', {
+                        routes: { selectCategory: "{{ route(DBRoutes::dataConfigSelect) }}"},
+                        slugs: { rubbishCategory: "{{ DBTypes::rubbishCategory }}"}
+                    });
+                    orderDetail.add();
+
+                    modal.form().submit({
+                        beforeSubmit: () => {
+                            modal.form().setDisabled(true);
+                        },
+                        data: function(params) {
+                            params.order_detail = orderDetail.toString();
+                            return params;
+                        },
+                        successCallback: (res) => {
+                            modal.form().setDisabled(false);
+                            AlertNotif.toastr.response(res);
+                            if(res.result) {
+                                modal.close();
+                                actions.datatable.reload();
+                            }
+                        },
+                        errorCallback: () => {
+                            modal.form().setDisabled(false);
+                        }
+                    })
+                }
             }).open();
         };
         actions.schedule = (id) => {

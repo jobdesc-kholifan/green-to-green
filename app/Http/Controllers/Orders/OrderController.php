@@ -172,4 +172,16 @@ class OrderController extends Controller
             return $this->jsonError($e);
         }
     }
+
+    public function form()
+    {
+        try {
+
+            return response()->json([
+                'content' => $this->viewResponse('order-form')
+            ]);
+        } catch (\Exception $e) {
+            return $this->jsonError($e);
+        }
+    }
 }

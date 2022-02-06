@@ -46,7 +46,7 @@
         });
 
         this.$input.on('focusout', () => {
-            setTimeout(() => this.$.removeClass('open'), 200);
+            setTimeout(() => this.$.removeClass('open'), 300);
         });
 
         this.initItems();
